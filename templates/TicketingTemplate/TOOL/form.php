@@ -616,7 +616,7 @@ class Form
 	function showStart()
 	{
 		return '
-		<form method="POST" ' . $this->showAction() . ' name="' . $this->fullName . '" id="' . $this->fullName . '" enctype="multipart/form-data" >';
+		<form action="'.Tool::url().'" method="POST" ' . $this->showAction() . ' name="' . $this->fullName . '" id="' . $this->fullName . '" enctype="multipart/form-data" >';
 	}
 
 	function getIsInsert()
