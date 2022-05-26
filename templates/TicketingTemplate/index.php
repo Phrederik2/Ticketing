@@ -6,6 +6,7 @@ include_once ('TOOL/onglet.php');
 include_once ('TOOL/form.php');
 include_once ('DAL/dbco.php');
 
+echo 'IMPORT OK';
 //$c = new customer_Frame();
 //include_once ('BASE/before.php');
 
