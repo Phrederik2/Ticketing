@@ -542,7 +542,7 @@ static function getTable2($data){
 		if(isset($_SERVER['HTTPS']))$protocol='https';
 
 		if(isset($_SERVER['HTTP_HOST']) and isset($_SERVER['SCRIPT_NAME'])){
-			$baselink = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'] ;
+			$baselink = $protocol.'://'.$_SERVER['HTTP_HOST'].$_SERVER['SCRIPT_NAME'].$_SERVER['PATH_INFO'] ;
 			$baselink = str_replace('var/www/html','TOFU.bc',$baselink);
 			$baselink = str_replace('callback.php','',$baselink);
 			
