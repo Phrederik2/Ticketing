@@ -6,10 +6,10 @@ include_once ('templates/TicketingTemplate/BASE/before.php');
 echo '<div id="app">';
 
 var_dump($_SERVER);
-//$c = new customer_Frame();
+$c = new customer_Frame();
 
 
-//echo $c->toString();
+echo $c->toString();
 	
 echo '</div>';
 
