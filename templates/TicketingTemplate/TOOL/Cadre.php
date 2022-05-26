@@ -3,14 +3,14 @@
 
 
 // chargement des controlleurs ce trouvant dans le reportoire $dir extention .php (ignore les .old)
-$dir    = 'TEMPLATE/';
+/*$dir    = 'TEMPLATE/';
 $files = scandir($dir);
 foreach($files as $file){ 
 	if(strstr($file,'.php')!==false){
         $file = $dir.$file;
 		include_once($file);
 	}
-}
+}*/
 
 
 /**
