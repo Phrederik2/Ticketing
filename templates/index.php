@@ -2,8 +2,10 @@
 script('ticketing', 'script');
 style('ticketing', 'style');
 
-include_once ('templates/TicketingTemplate/BASE/before.php');
+
 echo '<div id="app">';
+include_once ('templates/TicketingTemplate/BASE/before.php');
+
 
 //var_dump($_SERVER);
 //$c = new customer_Frame();
