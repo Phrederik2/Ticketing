@@ -2,7 +2,7 @@
 script('ticketing', 'script');
 style('ticketing', 'style');
 
-//include_once ('TicketingTemplate/BASE/before.php');
+include_once ('templates/TicketingTemplate/BASE/before.php');
 echo '<div id="app">';
 
 var_dump($_SERVER);
