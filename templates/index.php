@@ -8,10 +8,10 @@ include_once ('/var/www/html/nextcloud/apps/ticketing/templates/TicketingTemplat
 
 
 //var_dump($_SERVER);
-//$c = new customer_Frame();
+$c = new customer_Frame();
 
 
-//echo $c->toString();
+echo $c->toString();
 	
 echo '</div>';
 
