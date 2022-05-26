@@ -6,7 +6,7 @@ style('ticketing', 'style');
 echo '<div id="app">';
 include_once ('/var/www/html/nextcloud/apps/ticketing/templates/TicketingTemplate/index.php');
 
-echo 'Baselink:'.Tool::baselink().'<br>';
+/*echo 'Baselink:'.Tool::baselink().'<br>';
 
 echo '$_SERVER:<br>';
 foreach($_SERVER as $k=>$v){
@@ -20,7 +20,9 @@ foreach($_REQUEST as $k=>$v){
 
 
 
-//var_dump($_SERVER);
+//var_dump($_SERVER);*/
+
+
 $c = new customer_Frame();
 
 
