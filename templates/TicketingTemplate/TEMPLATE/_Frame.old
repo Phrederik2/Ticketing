@@ -1,0 +1,25 @@
+<?php
+class [NAME]_Frame extends Cadre_Base{
+	
+	function __construct($key, $useCache = false)
+    {
+        parent::__construct($key, $useCache, false);
+    }
+	
+    function init()
+    {
+		
+		$this->onglet = new Onglet([TITLE]);
+		$this->onglet->add($this->ONGLET_FUNCTION());
+		
+	}
+
+	function ONGLET_FUNCTION(){
+		$tab = new Tab();
+		
+		return $tab;
+	}
+
+	
+
+}

@@ -1,0 +1,107 @@
+notice-wrap {
+    display: block;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+	max-width: 500px;
+    font-family: 'Roboto', sans-serif;
+    padding: 15px 15px 0 15px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+notice-wrap[position='top-left'] {
+    right: auto;
+    left: 0
+}
+notice-wrap[position='bottom-left'] {
+    right: auto;
+    left: 0;
+    top: auto;
+    bottom: 0;
+}
+notice-wrap[position='bottom-right'] {
+    right: 0;
+    left: auto;
+    top: auto;
+    bottom: 0;
+}
+notice {
+    display: block;
+    position: relative;
+    font-size: 15px;
+    font-weight: normal;
+    color:whitesmoke;
+    background: linear-gradient(to right,#5c2d91 60%,#04afee 100%);
+    box-shadow: 10px 10px 43px -6px rgba(0,0,0,0.69);
+	border: 5px solid #CCC;
+	border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    padding: 15px;
+}
+notice:before,
+notice:after {
+    position: absolute;
+    content: "";
+    background-color: #BBB;
+
+    transform: rotate(45deg);
+}
+notice:before,
+notice:after {
+    box-sizing: border-box;
+}
+notice:before {
+    width: 16px;
+    height: 2px;
+    right: 14px;
+    top: calc(50% - 1px);
+}
+notice:after {
+    width: 2px;
+    height: 16px;
+    right: 21px;
+    top: calc(50% - 8px);
+}
+notice-close {
+    position: absolute;
+    display: block;
+    right: 12px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    top: calc(50% - 10px);
+    z-index: 1;
+}
+notice[close-on-click='true'] {
+    cursor: pointer;
+}
+notice[type='success'] {
+    border-color: #04be5b;
+}
+notice[type='success']:before,
+notice[type='success']:after {
+    background-color: #04be5b;  
+}
+notice[type='error'] {
+    border-color: #d2335c;
+}
+notice[type='error']:before,
+notice[type='error']:after {
+    background-color: #d2335c;
+}
+notice[type='warning'] {
+    border-color: #ff9948;
+}
+notice[type='warning']:before,
+notice[type='warning']:after {
+    background-color: #ff9948;
+}
+notice[type='info'] {
+    border-color: #0082d5;
+}
+notice[type='info']:before,
+notice[type='info']:after {
+    background-color: #0082d5;
+}

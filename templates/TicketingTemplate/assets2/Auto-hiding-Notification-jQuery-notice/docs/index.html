@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>jQuery.notice.js Demos</title>
+	<link rel="stylesheet" type="text/css" href="assets/css/main.css" />
+	<link rel="stylesheet" type="text/css" href="assets/css/notice.css" />
+    <style>
+    body { background-color:#ECF0F1;}
+    </style>
+</head>
+
+<body>
+	<div class="container">
+		<div class="content">
+			<header class="sg-header">
+				<h1>jQuery.notice.js Demos</h1>
+			</header>
+            <div class="jquery-script-ads" style="margin-bottom:50px" align="center"><script type="text/javascript"><!--
+google_ad_client = "ca-pub-2783044520727903";
+/* jQuery_demo */
+google_ad_slot = "2780937993";
+google_ad_width = 728;
+google_ad_height = 90;
+//-->
+</script>
+<script type="text/javascript"
+src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+</script></div>
+			<p>
+				<button id="demo-success">Success</button>
+				<button id="demo-error">Error</button>
+				<button id="demo-warning">Warning</button>
+				<button id="demo-info">Info</button>
+			</p>
+		</div>
+	</div>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script type="text/javascript" src="assets/js/jquery.notice.js"></script>
+    <script type="text/javascript">
+	$( "#demo-success" ).click(function() {
+		$.notice({
+			text: "Success Message Here!",
+            type: "success"
+		});
+	});
+	$( "#demo-error" ).click(function() {
+		$.notice({
+			text: "Error Message Here!",
+			type: "error"
+		});
+	});
+	$( "#demo-warning" ).click(function() {
+		$.notice({
+			text: "Warning Message Here!",
+			type: "warning"
+		});
+	});
+	$( "#demo-info" ).click(function() {
+		$.notice({
+			text: "Info Message Here!",
+			type: "info"
+		});
+	});
+
+    </script>
+    <script type="text/javascript">
+
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-36251023-1']);
+  _gaq.push(['_setDomainName', 'jqueryscript.net']);
+  _gaq.push(['_trackPageview']);
+
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+
+</script>
+</body>
+</html>
