@@ -3752,9 +3752,9 @@ class DataViewer2
 				
 			}else{
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
-				$this->formFilter->addOption('Form-Action', '');
-				$this->formFilter->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-				$this->formFilter->addOption('LinkForm', $this->formFilter->getFullName());
+				$this->formFilter->getItem('New Record')->addOption('Form-Action', '');
+				$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+				$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());
 			}
 
 
