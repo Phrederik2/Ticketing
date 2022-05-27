@@ -12,6 +12,7 @@ class PageController extends Controller {
 	public function __construct($AppName, IRequest $request, $UserId){
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
+		var_dump($this->userId);
 	}
 
 	/**
@@ -32,7 +33,7 @@ class PageController extends Controller {
 	public function index() {
 		return new TemplateResponse('ticketing', 'index');  // templates/index.php
 	}
-	
+
 	/**
       * @NoAdminRequired
       * @NoCSRFRequired
