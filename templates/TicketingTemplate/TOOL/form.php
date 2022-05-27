@@ -3161,7 +3161,8 @@ class DataViewer2
 		// création du champ PAGE pour la pagination
 		$this->formFilter->addItem(new Number('Page'));
 		$this->formFilter->getItem('Page')->setDefaultValue(1);
-		$this->formFilter->getItem('Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
+		$this->setEvent($this->formFilter->getItem('Page'),'','change');
+		//$this->formFilter->getItem('Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
 
 		$this->formFilter->getItem('Page')->setAutoCompletion(false);
 		$this->formFilter->getItem('Page')->addClass('minimumSize');
@@ -3169,7 +3170,8 @@ class DataViewer2
 		// création du champ Pagination pour la pagination
 		$this->formFilter->addItem(new Number('Pagination'));
 		$this->formFilter->getItem('Pagination')->setDefaultValue($this->pagination);
-		$this->formFilter->getItem('Pagination')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
+		$this->setEvent($this->formFilter->getItem('Pagination'),'','change');
+		//$this->formFilter->getItem('Pagination')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
 		$this->formFilter->getItem('Pagination')->setAutoCompletion(false);
 		$this->formFilter->getItem('Pagination')->addClass('minimumSize');
 
@@ -3684,10 +3686,6 @@ class DataViewer2
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
 					$this->setEvent($form->getItem($ref),$k);
-
-					/*$form->getItem($ref)->addOption('Form-Action', $k);
-					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());*/
 					$v = $form->getItem($ref)->toString();
 				}
 				else if(isset($line[$alias]) and $this->getCommandeOption()===$k){
@@ -3695,10 +3693,6 @@ class DataViewer2
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
 					$this->setEvent($form->getItem($ref),'');
-					
-					/*$form->getItem($ref)->addOption('Form-Action', '');
-					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());*/
 					$v = $form->getItem($ref)->toString();
 				}
 				
@@ -3761,9 +3755,6 @@ class DataViewer2
 			}else{
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
 				$this->setEvent($this->formFilter->getItem('New Record'),'');
-				/*$this->formFilter->getItem('New Record')->addOption('Form-Action', '');
-				$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-				$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());*/
 			}
 
 
