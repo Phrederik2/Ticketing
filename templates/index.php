@@ -22,6 +22,12 @@ foreach($_REQUEST as $k=>$v){
 
 //var_dump($_SERVER);*/
 
+echo '$_POST:<br>';
+foreach($_POST as $k=>$v){
+    echo '['.$k.']=>['.$v.']<br>';
+}
+
+
 
 $c = new customer_Frame();
 
