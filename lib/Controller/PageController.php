@@ -12,6 +12,7 @@ class PageController extends Controller {
 	public function __construct($AppName, IRequest $request, $UserId){
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
+		$_SESSION['u']=$this->userId;
 	
 	}
 
