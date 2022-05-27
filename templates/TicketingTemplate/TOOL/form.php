@@ -3127,11 +3127,15 @@ class DataViewer2
 		$_SESSION[$this->labelcommandeOption]=$commande;
 	}
 
-	function setEvent($target,$action){
-		/*return 'document.getElementsByName(\''.$this->formFilter->getItem($target)->getFullName().'\')[0].setAttribute(\'value\',\''.$action.'\');
-		document.'.$this->formFilter->getFullName() . '.submit();';*/
-		return "$('#".$this->formFilter->getItem($target)->getFullName()."').val('".$action."');"
-		. "$('#".$this->formFilter->getFullName()."').submit();";
+	function setEvent($target,$action, $event='click'){
+		
+		
+		$target->addOption('Form-Action-'.$event, true);
+		$target->addOption('Action', $action);
+		//$target->addOption('ActionEvent', $event);
+		$target->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+		$target->addOption('LinkForm', $this->formFilter->getFullName());
+
 	}
 
 
@@ -3158,6 +3162,7 @@ class DataViewer2
 		$this->formFilter->addItem(new Number('Page'));
 		$this->formFilter->getItem('Page')->setDefaultValue(1);
 		$this->formFilter->getItem('Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
+
 		$this->formFilter->getItem('Page')->setAutoCompletion(false);
 		$this->formFilter->getItem('Page')->addClass('minimumSize');
 
@@ -3181,20 +3186,20 @@ class DataViewer2
 		$this->formFilter->addItem(new Button('Reinitialize'));
 		$this->formFilter->getItem('Reinitialize')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'RESET' dans l'input Option et de valider le formulaire
-	
-		$this->formFilter->getItem('Reinitialize')->addOption('Form-Action', 'RESET');
+		$this->setEvent($this->formFilter->getItem('Reinitialize'),'RESET');
+		/*$this->formFilter->getItem('Reinitialize')->addOption('Form-Action', 'RESET');
 		$this->formFilter->getItem('Reinitialize')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-		$this->formFilter->getItem('Reinitialize')->addOption('LinkForm', $this->formFilter->getFullName());
+		$this->formFilter->getItem('Reinitialize')->addOption('LinkForm', $this->formFilter->getFullName());*/
 		
 		
 		// création du bouton New Record
 		$this->formFilter->addItem(new Button('New Record'));
 		$this->formFilter->getItem('New Record')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'NEWRECORD' dans l'input Option et de valider le formulaire
-		
-		$this->formFilter->getItem('New Record')->addOption('Form-Action', 'NEWRECORD');
+		$this->setEvent($this->formFilter->getItem('New Record'),'NEWRECORD');
+		/*$this->formFilter->getItem('New Record')->addOption('Form-Action', 'NEWRECORD');
 		$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-		$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());
+		$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());*/
 		
 
 		// récuperer la valeur de Option dans le POST pour executer les actions requises
