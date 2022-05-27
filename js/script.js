@@ -4,8 +4,14 @@
 
 
 $('[Form-Edit-Action]').on('click',function () {
+    
     alert($(this).attr('Form-Edit-Action'));
-    $(this).submit();
+    
+    var nameO = $(this).attr('LinkOption');
+    $(nameO).attr('value',$(this).attr('Form-Edit-Action'));
+    
+    var nameF = $(this).attr('LinkForm');
+    $(nameF).submit();
 });
 
 
