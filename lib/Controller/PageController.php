@@ -32,6 +32,11 @@ class PageController extends Controller {
 	public function index() {
 		return new TemplateResponse('ticketing', 'index');  // templates/index.php
 	}
+	
+	/**
+      * @NoAdminRequired
+      * @NoCSRFRequired
+      */
 	public function indexPOST() {
 		return $this->index();  // templates/index.php
 	}
