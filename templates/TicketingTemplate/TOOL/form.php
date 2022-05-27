@@ -3133,8 +3133,19 @@ class DataViewer2
 		$target->addOption('Form-Action-'.$event, true);
 		$target->addOption('Action', $action);
 		//$target->addOption('ActionEvent', $event);
-		$target->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-		$target->addOption('LinkForm', $this->formFilter->getFullName());
+
+		$target->addOption('LinkOption',null);
+		$target->addOption('LinkForm', null);
+
+		if($target->getParent()!=null){
+			$form = $target->getParent();
+			if($form->getItem('Option')!=null){
+				$target->addOption('LinkOption',$form->getItem('Option')->getFullName());
+			}
+			
+			$target->addOption('LinkForm', $this->formFilter->getFullName());
+		}
+		
 
 	}
 
