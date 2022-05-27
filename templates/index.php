@@ -1,11 +1,11 @@
 <?php
 script('ticketing', 'script');
 style('ticketing', 'style');
-
-
-echo '<div id="app">';
 include_once ('/var/www/html/nextcloud/apps/ticketing/templates/TicketingTemplate/index.php');
 
+echo '<div id="app">';
+
+echo '['.$_SESSION['u'].']';
 /*echo 'Baselink:'.Tool::baselink().'<br>';
 
 echo '$_SERVER:<br>';
