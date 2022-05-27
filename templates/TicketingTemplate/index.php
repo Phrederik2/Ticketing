@@ -8,8 +8,7 @@ include_once ('DAL/dbco.php');
 include_once ('TEMPLATE/V_customer.php');
 
 //echo 'IMPORT OK';
-//$c = new customer_Frame();
-//include_once ('BASE/before.php');
-
-//echo $c->toString();
-//include_once ('BASE/after.php');
+$c = new customer_Frame();
+include_once ('BASE/before.php');
+echo $c->toString();
+include_once ('BASE/after.php');
