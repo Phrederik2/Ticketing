@@ -3671,6 +3671,7 @@ class DataViewer2
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
 					$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',$k));
+					$form->getItem($ref)->addOption('Form-Edit-Action', $k);
 					$v = $form->getItem($ref)->toString();
 				}
 				else if(isset($line[$alias]) and $this->getCommandeOption()===$k){
