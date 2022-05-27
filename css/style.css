@@ -1,7 +1,16 @@
+body{
+	background-color: aqua;
+	color: rgb(1, 39, 30);
+
+}
 #Page{
 	margin-left: auto;
     margin-right: auto;
 	min-height: 10em;
     display: table-cell;
     vertical-align: middle
+}
+
+form{
+	border: 1px solid black;
 }
