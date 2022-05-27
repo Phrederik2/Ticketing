@@ -3130,7 +3130,7 @@ class DataViewer2
 	function setEvent($target,$action){
 		/*return 'document.getElementsByName(\''.$this->formFilter->getItem($target)->getFullName().'\')[0].setAttribute(\'value\',\''.$action.'\');
 		document.'.$this->formFilter->getFullName() . '.submit();';*/
-		return "$('#".$this->formFilter->getItem($target)->getFullName().").va('".$action."');"
+		return "$('#".$this->formFilter->getItem($target)->getFullName()."').va('".$action."');"
 		. "$('#".$this->formFilter->getFullName()."').submit();";
 	}
 
