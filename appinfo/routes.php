@@ -10,7 +10,7 @@
 return [
     'routes' => [
 	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
-	  // ['name' => 'page#index', 'url' => '/', 'verb' => 'POST'],
+	   ['name' => 'page#indexPOST', 'url' => '/', 'verb' => 'POST'],
 	   ['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
     ]
 ];
