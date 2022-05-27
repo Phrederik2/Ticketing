@@ -3181,13 +3181,20 @@ class DataViewer2
 		$this->formFilter->addItem(new Button('Reinitialize'));
 		$this->formFilter->getItem('Reinitialize')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'RESET' dans l'input Option et de valider le formulaire
-		$this->formFilter->getItem('Reinitialize')->addOption('onclick', $this->setEvent('Option','RESET'));
+	
+		$this->formFilter->getItem('Reinitialize')->addOption('Form-Action', 'RESET');
+		$this->formFilter->getItem('Reinitialize')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+		$this->formFilter->getItem('Reinitialize')->addOption('LinkForm', $this->formFilter->getFullName());
+		
 		
 		// création du bouton New Record
 		$this->formFilter->addItem(new Button('New Record'));
 		$this->formFilter->getItem('New Record')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'NEWRECORD' dans l'input Option et de valider le formulaire
-		$this->formFilter->getItem('New Record')->addOption('onclick', $this->setEvent('Option','NEWRECORD'));
+		
+		$this->formFilter->getItem('New Record')->addOption('Form-Action', 'NEWRECORD');
+		$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+		$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());
 		
 
 		// récuperer la valeur de Option dans le POST pour executer les actions requises
@@ -3670,8 +3677,8 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
-					//$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',$k));
-					$form->getItem($ref)->addOption('Form-Edit-Action', $k);
+					
+					$form->getItem($ref)->addOption('Form-Action', $k);
 					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());
 					$v = $form->getItem($ref)->toString();
@@ -3680,8 +3687,10 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					//$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',''));
-					$form->getItem($ref)->addOption('Form-Edit-Action', '');
+					
+					$form->getItem($ref)->addOption('Form-Action', '');
+					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());
 					$v = $form->getItem($ref)->toString();
 				}
 				
@@ -3743,7 +3752,9 @@ class DataViewer2
 				
 			}else{
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
-				$this->formFilter->getItem('New Record')->addOption('onclick', $this->setEvent('Option',''));
+				$this->formFilter->addOption('Form-Action', '');
+				$this->formFilter->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
+				$this->formFilter->addOption('LinkForm', $this->formFilter->getFullName());
 			}
 
 
