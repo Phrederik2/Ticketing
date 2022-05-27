@@ -3670,7 +3670,7 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
-					$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',$k));
+					//$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',$k));
 					$form->getItem($ref)->addOption('Form-Edit-Action', $k);
 					$v = $form->getItem($ref)->toString();
 				}
@@ -3678,7 +3678,8 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',''));
+					//$form->getItem($ref)->addOption('onclick', $this->setEvent('Option',''));
+					$form->getItem($ref)->addOption('Form-Edit-Action', '');
 					$v = $form->getItem($ref)->toString();
 				}
 				
