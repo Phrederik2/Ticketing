@@ -2,11 +2,6 @@
 	--Green: yellowgreen;
 	--mauve: rgba(92,45,145,0.2);
 	--mauve2: rgba(92,45,145,0.3);
-	--blue: rgb(86, 63, 240);
-	--blue2: rgb(146, 132, 237);
-	--black:rgba(9, 9, 9, 0.973);
-	--black:rgba(9, 9, 9, 0.366);
-	--link:rgba(243, 239, 239, 0.896);
   }
   
   html {
@@ -17,7 +12,7 @@
 	margin: 0;
 	padding: 0;
 	  font-size: small;
-	  background: linear-gradient(to right,--blue 60%, --black 20%);
+	  background: linear-gradient(to right,rgba(92,45,145,0.2) 60%, rgba(4,175,238,0.2) 100%);
 	  
   }
   
@@ -34,7 +29,7 @@
 	  opacity: 1;
 	  height: 50px;
 	  width: 300px;
-	  
+	  border-radius: 0 0 15px 15px;
 	  transition: all 1s;
 	  transition-delay: 1s;
   }
@@ -158,10 +153,28 @@
 	  transition-delay: 1s!important;
   }
   
-  .ellipsis:hover{  
+  .ellipsis:hover{
+	 
+	 
 	  max-width: 600px; 
-	   
+	  
+	 
   }
+  
+  
+  /*#wordtree_explicit{
+	  margin: 0!important;
+	  padding: 0!important;
+	  border: 0!important;
+	  font-size: 100%!important;
+	  font: inherit!important;
+	  vertical-align: baseline!important;
+  
+	  width:95% !important;
+	  height:95% !important;
+	  line-height: normal;
+	  
+  }*/
   
   .BlueViolet{
 	 
@@ -212,7 +225,7 @@
 	  right: 10px;
 	  background: ivory;
 	  border: 1px solid;
-	  
+	  border-radius: 20px 20px 20px 20px;   
 	  padding: 10px; 
 	  margin: 15px;
 	  opacity: 0;
@@ -238,7 +251,7 @@
 	  right: 10px;
 	  background: ivory;
 	  border: 1px solid;
-	
+	  border-radius: 20px 20px 20px 20px;   
 	  padding: 10px; 
 	  margin: 15px;
 	  opacity:0.5;
@@ -300,7 +313,7 @@
 	  top: 0px;
 	  background: yellowgreen;
 	  width: 0px;
-	  
+	  border-radius: 0 20px 20px 0;   
 	  padding: 2px; 
   }
   
@@ -319,7 +332,7 @@
 	  padding-left:10px; 
 	  padding-right:10px; 
 	  opacity: 1;
-	  
+	  border-radius: 10px;
 	  border: 0px solid!important; 
 	  
   
@@ -362,7 +375,7 @@
 	width: 240px;
 	background: white;
 	border: 1px solid #ccc;
-	
+	border-radius: 3px;
 	box-shadow: 0 4px 8px 0 rgba(34, 47, 62, .1);
 	padding: 8px;
 	font-size: 14px;
@@ -419,7 +432,7 @@
   
   .comment{
 	  border: 1px solid black;
-		
+	  border-radius: 10px;   
 	  margin: 5px;
 	  padding: 5px; 
   }
@@ -510,14 +523,15 @@
   }
   
   table{
-	width: 100%;
+	  width: 100%;
+	  border: 1px solid rgba(92,45,145,0.5);
 	  
-	margin-top: 10px;
+	  margin-top: 10px;
 	  background-color:white;
-	  color:var(--blue);
+	  color:rgb(92,45,145);
 	  border-collapse: separate;
-	 border-spacing: 1px 1px;
-	table-layout: auto;
+	  border-spacing: 1px 1px;
+	  table-layout: auto;
 		  
   }
   
@@ -544,34 +558,32 @@
   }
   
   tr:nth-child(odd){
-	  background-color:var(--blue2);
-	
+	  background-color:rgba(245, 243, 249, 1);
   }
   
   tr:nth-child(even){
-	  background-color:var(--black)2;
+	  background-color:rgba(239, 229, 242, 1);
   }
   
   
   tr a:link  {
-	  color:var(--link);
+	  color:rgb(92,45,145);
 	  font-weight:bold;
   }
   
   
   tr:hover{
-	  background-color:var(--blue2);
-	  color:var(--link);
+	  background-color:rgb(92,45,145);
+	  color:rgb(234,232,238);
   }
-  
   tr:hover .select2-selection{
 	  /*background-color:rgb(92,45,145);*/
-	  color:var(--blue2);
+	  color:rgb(92,45,145);
   }
   
   tr:hover,tr:hover a:link, tr:hover,tr:hover a:visited{
-	  background-color:var(--blue2);
-	  color:var(--link);
+	  background-color:rgb(92,45,145);
+	  color:rgb(234,232,238);
 	  
   }
   
@@ -581,8 +593,8 @@
   }
   
   th{
-	  background-color:var(--blue2);
-	  color:var(--link);
+	  background-color:rgb(92,45,145);
+	  color:rgb(234,232,238);
 	  font-weight:bold;
   }
   
@@ -671,7 +683,7 @@
   
   caption{
 	  
-	  color:var(--blue)2;
+	  color:rgb(92,45,145);
 	  padding-left: 1%;
 	  font-weight:bold
   }
@@ -701,8 +713,8 @@
   }
   
   textarea,input,select{
-	  background: var(--blue2);
-	  
+	  background: rgba(92,45,145,0.2);
+	  background: rgba(214,203,228,1);
 	  color:black;
 	  font-weight: bold;
 	  transition: opacity 2s, background-color 2s, transform 2s, box-shadow 2s, color 2s, border 0.5s;
@@ -712,7 +724,7 @@
 	  padding-left:10px; 
 	  padding-right:10px; 
 	  opacity: 1;
-	  
+	  border-radius: 10px;
 	  border: 1px grey solid; 
 	  
   }
@@ -728,7 +740,7 @@
   }*/
   
   input[type=button],input[type=submit]{
-	  background: var(--blue2);
+	  background: rgba(92,45,145,0.5);
 	  font-weight: bold;
   }
   
@@ -795,7 +807,7 @@
   
 	  color: white;
   
-	  
+	  border-radius: 20px;
   
 	  font: bold 14px "Helvetica Neue", Sans-Serif;
   
@@ -873,7 +885,7 @@
 	  width: 100%;
 	  margin: 0 auto;
 	  color:whitesmoke;
-	  
+	  border-radius: 4px;
 	  background: linear-gradient(to right,#5c2d91 60%,#04afee 100%);
 	 
 	  top: 0px;
@@ -930,7 +942,7 @@
   
   nav a:hover{
 	  background-color: rgba(234,232,238,.5);
-	 
+	  border-radius: 4px;
 	  color:rgb(234,232,238);
 	  font-weight:bold;
 	  
@@ -939,7 +951,7 @@
   .sous{
 	  display: none;
 	  box-shadow: 0px 1px 2px #CCC;
-	 
+	  border-radius: 0px 0px 4px 4px;
 	  background: linear-gradient(to right,#5c2d91 60%,#04afee 100%);
 	  position: absolute;
 	  width: 100%;
@@ -1144,7 +1156,7 @@
 		  
 		  color: #fff;
 		  text-align: left;
-		 
+		  border-radius: 6px;
 		  padding: 5px ;
 		  position: absolute;
 		  bottom: 150%;
