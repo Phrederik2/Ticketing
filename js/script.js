@@ -4,6 +4,7 @@
 
 
 $list = $('[Form-Edit-Action]').on('click',function () {
+    alert($($this).atrt('Form-Edit-Action'));
     $(this).submit();
 });
 
