@@ -1,12 +1,13 @@
 :root{
 	--background-color: rgba(7, 107, 107, 0.647);
+	--background-colorGradiant: radial-gradient(circle, rgba(2,0,36,1) 0%, rgba(0,130,201,0.3) 0%, rgba(37,171,243,0.3) 100%);;
 	--fontColor: rgb(1, 39, 30);
 	--fontColorLink :rgb(1, 71, 55);
 	--border :rgb(0, 0, 0);
 }
 
 body{
-	background-color: var(--background-color);
+	background-color: var(--background-colorGradiant);
 	color: var(--fontColor);
 
 }
@@ -18,8 +19,10 @@ body{
     vertical-align: middle
 }
 
-form{
+table{
 	margin-top: 50px;
 	border: 1px solid var(--border);
 }
+
+
 
