@@ -3131,7 +3131,7 @@ class DataViewer2
 		/*return 'document.getElementsByName(\''.$this->formFilter->getItem($target)->getFullName().'\')[0].setAttribute(\'value\',\''.$action.'\');
 		document.'.$this->formFilter->getFullName() . '.submit();';*/
 		return "$('#".$this->formFilter->getItem($target)->getFullName().").va('".$action."');"
-		. "$('#".$this->formFilter->getFullName()."').submit();';
+		. "$('#".$this->formFilter->getFullName()."').submit();";
 	}
 
 
