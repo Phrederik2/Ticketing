@@ -3694,7 +3694,8 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					$form->getItem($ref)->addOption('Form-Action', '');
+					$this->setEvent($form->getItem($ref),'');
+					
 					/*$form->getItem($ref)->addOption('Form-Action', '');
 					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());*/
