@@ -10,5 +10,5 @@ include_once ('TEMPLATE/V_customer.php');
 //echo 'IMPORT OK';
 $c = new customer_Frame();
 //include_once ('BASE/before.php');
-echo $c->toString();
+echo '<div id="Page">'.$c->toString().'</div>';
 //include_once ('BASE/after.php');
