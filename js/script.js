@@ -4,7 +4,7 @@
 
 
 $('[Form-Edit-Action]').on('click',function () {
-    alert($($this).attr('Form-Edit-Action'));
+    alert($(this).attr('Form-Edit-Action'));
     $(this).submit();
 });
 
