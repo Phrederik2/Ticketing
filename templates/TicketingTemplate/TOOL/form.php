@@ -3232,7 +3232,8 @@ class DataViewer2
 				//$this->formFilter->addItem(new Item('<br>'));
 				$this->formFilter->getItem($alias)->addClass('width100');
 				//$this->formFilter->getItem($alias)->addClass('whereinput');
-				$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
+				//$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
+				$this->setEvent($this->formFilter->getItem($alias),'','change');
 				$this->formFilter->getItem($alias)->setAutoCompletion(false);
 			}
 			
@@ -3242,7 +3243,7 @@ class DataViewer2
 			$this->formFilter->getItem($aliasSort)->addClass('width100');
 			//$this->formFilter->getItem($aliasSort)->addClass('minimumSize');
 			$this->formFilter->getItem($aliasSort)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-			
+			$this->setEvent($this->formFilter->getItem($aliasSort),'','change');
 			// si commande = RESET, remet les valeurs à blanc
 			if($option==='RESET'){
 				$this->formFilter->getItem($alias)->forceValue('');
@@ -3682,20 +3683,21 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
-					
-					$form->getItem($ref)->addOption('Form-Action', $k);
+					$this->setEvent($form->getItem($ref),$k);
+
+					/*$form->getItem($ref)->addOption('Form-Action', $k);
 					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());
+					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());*/
 					$v = $form->getItem($ref)->toString();
 				}
 				else if(isset($line[$alias]) and $this->getCommandeOption()===$k){
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					
 					$form->getItem($ref)->addOption('Form-Action', '');
+					/*$form->getItem($ref)->addOption('Form-Action', '');
 					$form->getItem($ref)->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());
+					$form->getItem($ref)->addOption('LinkForm', $this->formFilter->getFullName());*/
 					$v = $form->getItem($ref)->toString();
 				}
 				
@@ -3757,9 +3759,10 @@ class DataViewer2
 				
 			}else{
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
-				$this->formFilter->getItem('New Record')->addOption('Form-Action', '');
+				$this->setEvent($this->formFilter->getItem('New Record'),'');
+				/*$this->formFilter->getItem('New Record')->addOption('Form-Action', '');
 				$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
-				$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());
+				$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());*/
 			}
 
 
