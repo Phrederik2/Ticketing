@@ -153,6 +153,8 @@ class customer_Frame extends Cadre_Base{
 		$ff = new Form('SeeArchiveCustomer');
 		$ff->addItem(new Switcher('Voir Client inactif'));
 		$ff->getItem('Voir Client inactif')->addOption('onchange',$ff->getFullName().'.submit();');
+		DataViewer2::setEvent($ff->getItem('Voir Client inactif'),null,'change');
+		//$ff->getItem('Voir Client inactif')->addOption('onchange',$ff->getFullName().'.submit();');
 
 		// récupere la valeur du switcher pour l'intégrer dans la requete
 		$active=$ff->getItem('Voir Client inactif')->getValue();

@@ -3127,7 +3127,7 @@ class DataViewer2
 		$_SESSION[$this->labelcommandeOption]=$commande;
 	}
 
-	function setEvent($target,$action, $event='click'){
+	static function setEvent($target,$action, $event='click'){
 		
 		
 		$target->addOption('Form-Action-'.$event, true);
@@ -3143,7 +3143,7 @@ class DataViewer2
 				$target->addOption('LinkOption',$form->getItem('Option')->getFullName());
 			}
 			
-			$target->addOption('LinkForm', $this->formFilter->getFullName());
+			$target->addOption('LinkForm', $form->getFullName());
 		}
 		
 
@@ -3172,7 +3172,7 @@ class DataViewer2
 		// création du champ PAGE pour la pagination
 		$this->formFilter->addItem(new Number('Page'));
 		$this->formFilter->getItem('Page')->setDefaultValue(1);
-		$this->setEvent($this->formFilter->getItem('Page'),'','change');
+		self::setEvent($this->formFilter->getItem('Page'),'','change');
 		//$this->formFilter->getItem('Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
 
 		$this->formFilter->getItem('Page')->setAutoCompletion(false);
@@ -3181,7 +3181,7 @@ class DataViewer2
 		// création du champ Pagination pour la pagination
 		$this->formFilter->addItem(new Number('Pagination'));
 		$this->formFilter->getItem('Pagination')->setDefaultValue($this->pagination);
-		$this->setEvent($this->formFilter->getItem('Pagination'),'','change');
+		self::setEvent($this->formFilter->getItem('Pagination'),'','change');
 		//$this->formFilter->getItem('Pagination')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
 		$this->formFilter->getItem('Pagination')->setAutoCompletion(false);
 		$this->formFilter->getItem('Pagination')->addClass('minimumSize');
@@ -3199,7 +3199,7 @@ class DataViewer2
 		$this->formFilter->addItem(new Button('Reinitialize'));
 		$this->formFilter->getItem('Reinitialize')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'RESET' dans l'input Option et de valider le formulaire
-		$this->setEvent($this->formFilter->getItem('Reinitialize'),'RESET');
+		self::setEvent($this->formFilter->getItem('Reinitialize'),'RESET');
 		/*$this->formFilter->getItem('Reinitialize')->addOption('Form-Action', 'RESET');
 		$this->formFilter->getItem('Reinitialize')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 		$this->formFilter->getItem('Reinitialize')->addOption('LinkForm', $this->formFilter->getFullName());*/
@@ -3209,7 +3209,7 @@ class DataViewer2
 		$this->formFilter->addItem(new Button('New Record'));
 		$this->formFilter->getItem('New Record')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'NEWRECORD' dans l'input Option et de valider le formulaire
-		$this->setEvent($this->formFilter->getItem('New Record'),'NEWRECORD');
+		self::setEvent($this->formFilter->getItem('New Record'),'NEWRECORD');
 		/*$this->formFilter->getItem('New Record')->addOption('Form-Action', 'NEWRECORD');
 		$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 		$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());*/
@@ -3246,7 +3246,7 @@ class DataViewer2
 				$this->formFilter->getItem($alias)->addClass('width100');
 				//$this->formFilter->getItem($alias)->addClass('whereinput');
 				//$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-				$this->setEvent($this->formFilter->getItem($alias),'','change');
+				self::setEvent($this->formFilter->getItem($alias),'','change');
 				$this->formFilter->getItem($alias)->setAutoCompletion(false);
 			}
 			
@@ -3256,7 +3256,7 @@ class DataViewer2
 			$this->formFilter->getItem($aliasSort)->addClass('width100');
 			//$this->formFilter->getItem($aliasSort)->addClass('minimumSize');
 			$this->formFilter->getItem($aliasSort)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-			$this->setEvent($this->formFilter->getItem($aliasSort),'','change');
+			self::setEvent($this->formFilter->getItem($aliasSort),'','change');
 			// si commande = RESET, remet les valeurs à blanc
 			if($option==='RESET'){
 				$this->formFilter->getItem($alias)->forceValue('');
@@ -3696,14 +3696,14 @@ class DataViewer2
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
-					$this->setEvent($form->getItem($ref),$k);
+					self::setEvent($form->getItem($ref),$k);
 					$v = $form->getItem($ref)->toString();
 				}
 				else if(isset($line[$alias]) and $this->getCommandeOption()===$k){
 					$ref = $alias.'_'.$nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					$this->setEvent($form->getItem($ref),'');
+					self::setEvent($form->getItem($ref),'');
 					$v = $form->getItem($ref)->toString();
 				}
 				
@@ -3765,7 +3765,7 @@ class DataViewer2
 				
 			}else{
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
-				$this->setEvent($this->formFilter->getItem('New Record'),'');
+				self::setEvent($this->formFilter->getItem('New Record'),'');
 			}
 
 
