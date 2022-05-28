@@ -154,7 +154,7 @@ class customer_Frame extends Cadre_Base{
 		$ff->addItem(new Switcher('Voir Client inactif'));
 		$ff->getItem('Voir Client inactif')->addOption('onchange',$ff->getFullName().'.submit();');
 		DataViewer2::setEvent($ff->getItem('Voir Client inactif'),null,'change');
-		//$ff->getItem('Voir Client inactif')->addOption('onchange',$ff->getFullName().'.submit();');
+		
 
 		// récupere la valeur du switcher pour l'intégrer dans la requete
 		$active=$ff->getItem('Voir Client inactif')->getValue();
@@ -176,7 +176,9 @@ class customer_Frame extends Cadre_Base{
 
 		// créaction du dataviewer sur base de l'object SQL
 		$view = new DataViewer2('Customer',$sql);
-		
+		if($ff->getItem('Voir Client inactif')->getValue()==true){
+			$view->setCommandeOption('');
+		}
 		// lancement de l'initialization complete du dataviewer pour manipulation du résultat
 		$view->fullInit();
 
