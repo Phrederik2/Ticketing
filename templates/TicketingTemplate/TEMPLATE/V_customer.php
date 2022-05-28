@@ -152,7 +152,7 @@ class customer_Frame extends Cadre_Base{
 		// Création du formulaire pour selection des fiches active ou inactive
 		$ff = new Form('SeeArchiveCustomer');
 		$ff->addItem(new Switcher('Voir Client inactif'));
-		$ff->getItem('Voir Client inactif')->addOption('onchange',$ff->getFullName().'.submit();');
+		
 		DataViewer2::setEvent($ff->getItem('Voir Client inactif'),null,'change');
 		
 
@@ -244,9 +244,9 @@ class customer_Frame extends Cadre_Base{
 
 		$ff = new Form('SeeArchiveBooklet');
 		$ff->addItem(new Switcher('Voir Carnet Archivé'));
-		$ff->getItem('Voir Carnet Archivé')->addOption('onchange',$ff->getFullName().'.submit();');
 		
-
+		DataViewer2::setEvent($ff->getItem('Voir Carnet Archivé'),null,'change');
+		
 		$archive=$ff->getItem('Voir Carnet Archivé')->getValue();
 		
 		$sql = new SQL('Ticketing','Booklet','c');
