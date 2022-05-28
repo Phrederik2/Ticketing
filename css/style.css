@@ -1,6 +1,6 @@
 :root{
 	--background-color: rgba(7, 107, 107, 0.647);
-	--background-colorGradiant: radial-gradient(right bottom, rgba(2,0,36,1) 0%, rgba(0,130,201,1) 0%, rgba(37,171,243,1) 100%);;
+	--background-colorGradiant: radial-gradient(bottom right, rgba(2,0,36,1) 0%, rgba(0,130,201,1) 0%, rgba(37,171,243,1) 100%);;
 	--fontColor: rgb(1, 39, 30);
 	--fontColorLink :rgb(1, 71, 55);
 	--border :rgb(0, 0, 0);
