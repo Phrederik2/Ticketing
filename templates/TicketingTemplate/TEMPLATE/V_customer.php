@@ -176,6 +176,8 @@ class customer_Frame extends Cadre_Base{
 
 		// créaction du dataviewer sur base de l'object SQL
 		$view = new DataViewer2('Customer',$sql);
+
+		// si le sous-formulaire est appeller, alors vider la commande du formulaire principale pour supprimer toutes les actions en cours
 		if($ff->getPostExist()==true){
 			$view->setCommandeOption('');
 		}
