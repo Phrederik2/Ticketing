@@ -30,6 +30,7 @@ class customer_Frame extends Cadre_Base{
 			$this->onglet = new Onglet('Ticketing::Client'); 
 			$this->onglet->add($this->customer());
 		}
+		$this->onglet->add(new Tab('TEST'));
 		
 		
 	}
