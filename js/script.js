@@ -1,5 +1,5 @@
 
-function addEventlistener(event){
+function addEventListener(event){
     $('[Form-Action-'+event+']').on(event,function () {
         
        launchEvent(this);
