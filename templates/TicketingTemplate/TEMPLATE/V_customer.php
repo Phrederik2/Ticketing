@@ -176,7 +176,7 @@ class customer_Frame extends Cadre_Base{
 
 		// créaction du dataviewer sur base de l'object SQL
 		$view = new DataViewer2('Customer',$sql);
-		if($ff->getItem('Voir Client inactif')->getValue()==true){
+		if($ff->getPostExist()==true){
 			$view->setCommandeOption('');
 		}
 		// lancement de l'initialization complete du dataviewer pour manipulation du résultat
