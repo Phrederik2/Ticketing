@@ -29,6 +29,7 @@ table{
 
 .onglet{
 	background: var(--background-colorVeryLight);
+	margin: 10px;
 }
 
 
