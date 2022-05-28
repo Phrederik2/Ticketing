@@ -2,6 +2,7 @@
 	--background-color: rgba(7, 107, 107, 0.647);
 	--background-colorGradiant: radial-gradient(circle, rgba(0,130,201,1) 0%, rgba(37,171,243,1) 100%);
 	--background-colorLight: rgb(140, 210, 247);
+	--background-colorVeryLight: rgb(187, 226, 247);
 	--fontColor: rgb(1, 39, 30);
 	--fontColorLink :rgb(1, 71, 55);
 	--border :rgb(0, 0, 0);
@@ -24,6 +25,10 @@ table{
 	margin-top: 50px;
 	border: 1px solid var(--border);
 	background: var(--background-colorLight);
+}
+
+.onglet{
+	background: var(--background-colorVeryLight);
 }
 
 
