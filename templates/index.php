@@ -1,6 +1,6 @@
 <?php
 script('ticketing', 'script');
-script('ticketing', 'assest2/ON-OFF-Toggle-Switches-Switcher/jquery.switcher');
+script('ticketing', 'assest2/ON-OFF-Toggle-Switches-Switcher/js/jquery.switcher');
 
 
 
