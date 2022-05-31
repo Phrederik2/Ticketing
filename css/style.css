@@ -210,3 +210,24 @@ select {
 .js-example-basic-multiple:hover {
 	color: black !important;
 }
+
+.FieldTitle,.FieldSeparator,.FieldValue{
+    padding-top: 2x;
+    display: inline-block;
+	vertical-align: top;
+	
+}
+.Field{
+    display: inline;
+}
+
+.FieldTitle{
+    width: 20%;
+    font-weight: bold;
+}
+.FieldSeparator{
+    font-weight: bold;
+}
+.FieldValue{
+    padding-right: 10px;
+}
