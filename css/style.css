@@ -22,11 +22,12 @@ body {
 	vertical-align: middle
 }
 
-fieldset {
+fieldset, fieldset legend {
 	margin-top: 50px;
 	border: 1px solid var(--border);
 	background: var(--background-colorLight);
 }
+
 
 .tabs {
 	background: var(--background-colorVeryLight);
