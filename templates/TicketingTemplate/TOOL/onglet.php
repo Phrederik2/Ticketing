@@ -171,7 +171,7 @@ class Onglet
 	function full()
 	{
 		return "
-			<div class=\"tabs\">".$this->title . $this->showTimer() . $this->getOption() . "</div>
+			<div class=\"tabs\">".$this->title . $this->showTimer() . $this->getOption() . "
 				<ul>
 				" . $this->showHeader() . "
 				</ul>
