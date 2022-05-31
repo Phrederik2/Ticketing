@@ -18,8 +18,8 @@ script('ticketing', 'assets2/Trumbowyg/dist/plugins/table/trumbowyg.table.min');
 
 style('ticketing', 'style');
 style('ticketing', 'switcher');
-style('ticketing', 'trumbowyg.css');
-style('ticketing', 'trumbowyg.colors.css');
+style('ticketing', 'trumbowyg');
+style('ticketing', 'trumbowyg.colors');
 
 include_once ('/var/www/html/nextcloud/apps/ticketing/templates/TicketingTemplate/index.php');
 
