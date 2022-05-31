@@ -101,12 +101,6 @@ tr a:link {
 	font-weight: bold;
 }
 
-
-tr:hover {
-	background-color: rgb(92, 45, 145);
-	color: rgb(234, 232, 238);
-}
-
 tr img {
 	text-decoration: none;
 	color: inherit;
