@@ -171,20 +171,12 @@ class Onglet
 	function full()
 	{
 		return "
-		<div class=\"portlet box BlueViolet\">
-		<div class=\"portlet-title\">
-			<div class=\"caption\">
-				<i class=\"fa fa-gift\"></i>" . $this->title . $this->showTimer() . $this->getOption() . "</div>
-			<ul class=\"nav nav-tabs\">
-			" . $this->showHeader() . "
-			</ul>
-			</div>
-		<div class=\"portlet-body\">
-			<div class=\"tab-content\">
+			<div class=\"tabs\">".$this->title . $this->showTimer() . $this->getOption() . "</div>
+				<ul>
+				" . $this->showHeader() . "
+				</ul>
 			" . $this->showCorp() . "
 			</div>
-			</div>
-		</div>
 		";
 	}
 
@@ -412,7 +404,7 @@ class Tab
 
 		$str = $script . '
 		<li class="' . $this->showActive() . '">
-			<a aria-expanded="' . $this->showActiveBool() . '"  ' . $action . ' ' . $this->showOption() . ' href="#' . $this->uniqKey . '" data-toggle="tab">' . $this->title . '' . $this->show_Doc() . '</a>
+			<a ' . $action . ' ' . $this->showOption() . ' href="#' . $this->uniqKey . '">' . $this->title . '' . $this->show_Doc() . '</a>
 		</li>';
 		return $str;
 	}
@@ -452,7 +444,7 @@ class Tab
 		}
 
 		$str = '
-		<div class="tab-pane ' . $this->showActive() . '" lastUpdate="0" minimumDelay="' . $minimumDelay . '" id="' . $this->uniqKey . '" class="Onglet">
+		<div class="' . $this->showActive() . '" lastUpdate="0" minimumDelay="' . $minimumDelay . '" id="' . $this->uniqKey . '" >
 			
 			' . $item . '
 			

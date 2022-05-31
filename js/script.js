@@ -25,5 +25,9 @@ addEventListener('change');
 $(function(){ 
     // $.switcher(); 
     $.switcher('.ONOFF');
-  }); 
+}); 
+
+$( function() {
+    $( ".tabs" ).tabs();
+ } );
 
