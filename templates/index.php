@@ -1,5 +1,5 @@
 <?php
-script('ticketing', 'script');
+
 script('ticketing', 'assets2/ON-OFF-Toggle-Switches-Switcher/js/jquery.switcher');
 
 //script('ticketing', 'assets2/bootstrap/js/bootstrap.min');
@@ -14,6 +14,8 @@ script('ticketing', 'assets2/Trumbowyg/dist/plugins/history/trumbowyg.history.mi
 script('ticketing', 'assets2/Trumbowyg/dist/plugins/preformatted/trumbowyg.preformatted.min');
 script('ticketing', 'assets2/Trumbowyg/dist/plugins/resizimg/trumbowyg.resizimg.min');
 script('ticketing', 'assets2/Trumbowyg/dist/plugins/table/trumbowyg.table.min');
+
+script('ticketing', 'script');
 
 
 style('ticketing', 'style');
