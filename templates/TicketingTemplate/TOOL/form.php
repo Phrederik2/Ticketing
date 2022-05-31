@@ -1346,7 +1346,7 @@ class TextareaEditor extends FormItem
 
 		$str .= '
 			<textarea hidden  edit="true" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="' . $this->showClass() . '" id="' . $this->fullname . '" cols="' . $this->col . '" rows="' . $this->row . '" placeholder="' . $this->showPlaceHolder() . '" name="' . $this->fullname . '" ' . $this->showEnable() . '>' . $this->getValue() . '</textarea>';
-		$str .=	"<script AJAX_KEY=\"" . (bool)self::getOption('AJAX_KEY') . "\"> ";
+		$t =	"<script AJAX_KEY=\"" . (bool)self::getOption('AJAX_KEY') . "\"> ";
 
 		
 			$t = "$('#" . $this->fullname . "').trumbowyg(
@@ -1462,7 +1462,7 @@ class Switcher extends Checkbox
 			$.switcher("#' . $this->fullname . '");
 		  
 		</script>';
-		return $script . '
+		return  '
 			<Input type="checkbox" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="ONOFF ' . $this->showClass() . '" id="' . $this->fullname . '" name="' . $this->fullname . '" ' . $checked . ' ' . $this->showEnable() . '>';
 	}
 }
@@ -1748,10 +1748,7 @@ class MultiSelect extends SelectList{
 
 		return '
 			<select for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="js-example-basic-multiple ' . $this->showClass() . '" multiple="multiple" id="' . $this->fullname . ' ' . $this->showId() . '" name="' . $this->fullname . '[]" ' . $this->showEnable() . '>' . $this->showValue() . '</select>
-			<script AJAX_KEY="' . cadre_base::getOption('AJAX_KEY') . '">
-					$(".js-example-basic-multiple").select2();
-					</script>';
-			;
+			';
 	}
 }
 class ico
