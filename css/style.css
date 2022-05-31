@@ -132,6 +132,7 @@ select {
 	padding-left: 10px;
 	padding-right: 10px;
 	opacity: 1;
+	border-radius: initial;
 	
 	border: 1px grey solid;
 
