@@ -27,7 +27,7 @@ fieldset{
 	background: var(--background-colorLight);
 }
 
-.onglet{
+.tabs{
 	background: var(--background-colorVeryLight);
 	margin: 10px;
 	padding: 10px;
