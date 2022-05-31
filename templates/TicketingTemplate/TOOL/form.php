@@ -1349,7 +1349,7 @@ class TextareaEditor extends FormItem
 		$str .=	"<script AJAX_KEY=\"" . (bool)self::getOption('AJAX_KEY') . "\"> ";
 
 		
-			$str .= "$('#" . $this->fullname . "').trumbowyg(
+			$t = "$('#" . $this->fullname . "').trumbowyg(
 				{
 					
 					semantic: false,

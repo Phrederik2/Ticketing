@@ -31,3 +31,33 @@ $( function() {
     $( ".tabs" ).tabs();
  } );
 
+
+ $('textarea[edit=true]').trumbowyg(
+    {
+        
+        semantic: false,
+        btns: [
+            ['viewHTML'],
+            ['undo', 'redo'], 
+            ['custom'],
+            ['formatting'],
+            ['fontfamily'],
+            ['fontsize'],
+            ['strong', 'em', 'del','underline'],
+            ['foreColor', 'backColor'],
+            ['link'],
+            ['insertImage'],
+            ['preformatted'],
+            ['justifyLeft', 'justifyCenter', 'justifyRight', 'justifyFull'],
+            ['table'],
+            ['unorderedList', 'orderedList'],
+            ['horizontalRule'],
+            ['removeformat'],
+            ['historyUndo', 'historyRedo'],
+            ['fullscreen']
+            
+        ]
+    
+    }
+   );  
+
