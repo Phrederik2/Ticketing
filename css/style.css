@@ -233,3 +233,8 @@ select {
 .FieldValue{
     padding-right: 10px;
 }
+
+div .trumbowyg-editor [contenteditable=true]{
+	width: 100%;
+	height: 100%;
+}
