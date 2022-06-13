@@ -1,11 +1,19 @@
 :root {
+	
 	--background-color: rgba(7, 107, 107, 0.647);
 	--background-colorGradiant: radial-gradient(circle, rgba(0, 130, 201, 1) 0%, rgba(37, 171, 243, 1) 100%);
 	--background-colorLight: rgb(140, 210, 247);
 	--background-colorVeryLight: rgb(187, 226, 247);
+	--background-colorClear: rgb(247, 250, 252);
 	--fontColor: rgb(1, 39, 30);
+	--fontColorSplitNotif: rgb(219, 245, 232);
+	--fontColorNotif: rgb(230, 210, 206);
 	--fontColorLink: rgb(1, 71, 55);
 	--border: rgb(0, 0, 0);
+	--Notif: rgb(31, 249, 136);
+	--Medium: rgb(249, 249, 31);
+	--SplitNotif: rgb(247, 81, 35);
+	--shadow: rgba(0, 0, 0, 0.436);
 }
 
 body {
@@ -19,22 +27,61 @@ body {
 	margin-right: auto;
 	/*min-height: 10em;*/
 	display: table-cell;
-	vertical-align: middle
+	vertical-align: middle;
+	width: 80%;
+	
 }
 
-fieldset, fieldset legend {
-	margin-top: 50px;
-	border: 1px solid var(--border);
+fieldset, table{
+	
+	margin-top: 15px;
+	margin-left: 15px;
+	margin-right: 15px;
+	
 	background: var(--background-colorLight);
-	padding-left: 10px;
+	
 }
 
-
-.tabs {
-	background: var(--background-colorVeryLight);
-	margin: 10px;
-	padding: 10px;
+input{
+    background: var(--background-colorVeryLight);
 }
+
+fieldset, table, .tooltips, .tooltipstext
+{
+    box-shadow: 7px 7px 7px var(--shadow);
+}
+
+fieldset{
+    padding-left: 15px;
+    padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+table {
+	width: calc(100% - 30px);
+
+	margin-top: 10px;
+	background-color: var(--background-colorLight);
+	color: var(--fontColor);
+	border-collapse: separate;
+	border-spacing: 1px 1px;
+	table-layout: auto;
+
+}
+
+fieldset legend{
+	position: relative;
+	top: 10px; 
+	left: 10px;
+	font-weight: bold;
+}
+fieldset legend::before{
+	content:'.::';
+}
+fieldset legend::after{
+	content:'::.';
+}
+
 
 /*The sticky class is added to the header with JS when it reaches its scrollposition */
 .sticky {
@@ -51,26 +98,11 @@ fieldset, fieldset legend {
 .tabs {
 	overflow: auto;
 	height: auto;
+    background: var(--background-colorClear);
+	margin: 10px;
+	padding: 10px;
 }
 
-/*textarea[edit=true] {
-
-	min-width: 1200px !important;
-	height: 700px !important;
-}*/
-
-table {
-	width: 100%;
-	border: 1px solid black;
-
-	margin-top: 10px;
-	background-color: var(--background-colorLight);
-	color: var(--fontColor);
-	border-collapse: separate;
-	border-spacing: 1px 1px;
-	table-layout: auto;
-
-}
 
 td {
 	padding-left: 5px;
@@ -114,7 +146,7 @@ th {
 	font-weight: bold;
 }
 
-textarea,
+
 input,
 select {
 	
@@ -132,6 +164,10 @@ select {
 	
 	border: 1px grey solid;
 
+}
+
+.DataViewer2Search{
+display: block;
 }
 
 input[type=button],
@@ -173,14 +209,14 @@ select {
 	height: auto;
 	background-color: rgb(0, 0, 0);
 	border: 2px solid rgb(255, 255, 255);
-
+	z-index: 999;
 	color: #fff;
 	text-align: left;
-	
 	padding: 5px;
 	position: absolute;
-	bottom: 150%;
+	bottom: 20px;
 	left: 50%;
+	/*margin-left: calc(attr(width) / 2);*/
 	margin-left: -160px;
 	opacity: 0;
 	transition: opacity 0.5s;
@@ -193,15 +229,17 @@ select {
 	position: absolute;
 	top: 100%;
 	left: 50%;
-	margin-left: -10px;
+	/*margin-left: -10px;*/
+	
 	border-width: 10px;
 	border-style: solid;
-	border-color: rgb(255, 255, 255) transparent transparent transparent;
+	border-color: rgb(0, 0, 0) transparent transparent transparent;
 }
 
 .tool:hover .tooltips .tooltipstext {
 	visibility: visible;
 	opacity: 1;
+	
 }
 
 .text_right {
@@ -236,8 +274,34 @@ select {
 
 .trumbowyg-editor{
 	width: 100%!important;
-	height: 100%!important;
+	/*height: 100%!important;
 	overflow-y: auto;
 	overflow-x: auto;
-	background-color: white;
+	background-color: white;*/
 }
+
+.trumbowyg-box, .trumbowyg-editor { min-height: 150px; } 
+
+input[type=datetime-local]{
+    width: 110%;
+}
+
+.SplitNotif,.SplitNotif a:link, .bad{
+	background: var(--SplitNotif);
+    color: var(--fontColorSplitNotif);
+}
+.Notif, .good{
+	background: var(--Notif);
+    
+}
+
+.medium{
+    background: var(--Medium);
+}
+
+.bad,.good,.medium{
+    padding-left: 10px;
+    padding-right: 10px;
+    border-radius: 15px;
+}
+

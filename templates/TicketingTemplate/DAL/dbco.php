@@ -20,6 +20,7 @@ class DbCo
 	public static $safeData = true;
 	public static $errorstr = false;
 	public static $queryError = false;
+	public static $dbname = null;
 
 	/**
 	 * Undocumented function
@@ -35,12 +36,34 @@ class DbCo
 		DbCo::$pdo = array();
 	}
 
+	static function getDbName(){
+		if(self::$dbname===null){
+			self::getPDO();
+		}
+		return self::$dbname;
+	}
+
 	static function selectDB($db = 'default')
 	{
 		if ($db === 'default') {
-			$dbopen = 'Ticketing';
 
-			self::init($db, 'localhost', 'nextcloud', 'prouteproute!tagada', $dbopen);
+			$file = $_SERVER['SCRIPT_FILENAME'];
+			$file = str_replace('index.php','config/config.php',$file);
+
+			if(!file_exists($file)){
+				exit;
+			}
+
+			include($file);
+		
+			$dbhost = $CONFIG['dbhost'];
+			$dbuser = $CONFIG['dbuser'];
+			$dbpassword = $CONFIG['dbpassword'];
+			self::$dbname = $CONFIG['dbname'];
+
+			unset($CONFIG);
+
+			self::init($db, $dbhost, $dbuser, $dbpassword, self::$dbname);
 		}
 	}
 
@@ -405,7 +428,17 @@ class DbCo
 class Query{
 
 	static function getCustomer($id){
-		$sql = 'SELECT name FROM Ticketing.Customer WHERE id=?';
+		$sql = 'SELECT name FROM TicketingCustomer WHERE id=?';
+		return DbCo::getQuery($sql,[$id]);
+	}
+	static function getCustomerByBooklet($id){
+		$sql = 'SELECT customer_id FROM TicketingBooklet WHERE id=?';
+		return DbCo::getQuery($sql,[$id]);
+	}
+	static function getCustomerKeyByBooklet($id){
+		$sql = 'SELECT c.publickey FROM TicketingBooklet as b 
+                JOIN TicketingCustomer as c on b.customer_id=c.id
+                WHERE b.id=?';
 		return DbCo::getQuery($sql,[$id]);
 	}
 
@@ -414,16 +447,16 @@ class Query{
 		sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointuse, 
 		sum(if(i.gift!=0,i.point,null)) as sumpointgift, 
 		b.initialpoint-sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointremaining
-		FROM Ticketing.Customer as c 
-				LEFT join Ticketing.Booklet as b on c.id=b.customer_id
-				left join Ticketing.Intervention as i on b.id=i.booklet_id
+		FROM TicketingCustomer as c 
+				LEFT join TicketingBooklet as b on c.id=b.customer_id
+				left join TicketingIntervention as i on b.id=i.booklet_id
 				WHERE b.id=?';
 
 		return DbCo::getQuery($sql,[$id]);
 	}
 
 	static function setOverrideIntervention($id,$overridepoint){
-		$sql = 'UPDATE Ticketing.Intervention
+		$sql = 'UPDATE TicketingIntervention
 				SET override=1, overridepoint=?
 				WHERE id=?;
 				COMMIT;';
@@ -431,30 +464,30 @@ class Query{
 		return DbCo::getQuery($sql,[$overridepoint,$id]);
 	}
 
-	static function setNewCarnet($customerid,$initialPoint){
-		$sql = 'INSERT INTO Ticketing.Booklet (customer_id,initialpoint) VALUES (?,?);
+	static function setNewCarnet($customerid,$initialPoint,$key){
+		$sql = 'INSERT INTO TicketingBooklet (publickey,customer_id,initialpoint) VALUES (?,?,?);
 				COMMIT;';
 
-		return DbCo::getQuery($sql,[$customerid,$initialPoint]);
+		return DbCo::getQuery($sql,[$key,$customerid,$initialPoint]);
 	}
 
 	static function getMaxBookletForCustomer($customerid){
-		$sql = 'SELECT max(id) as max FROM Ticketing.Booklet WHERE customer_id=?';
+		$sql = 'SELECT max(id) as max FROM TicketingBooklet WHERE customer_id=?';
 
 		return DbCo::getQuery($sql,[$customerid]);
 	}
 
-	static function setNewInterventionOverride($interventionOrigine,$bookletid,$overridePoint){
-		$sql = 'INSERT INTO Ticketing.Intervention (`customer_id`, `booklet_id`, `gift`, `start`, `end`, `user`, `remark`, `point`, `override`, `overridePoint`,`OriginalIntervention`)
-				SELECT `customer_id`, '.$bookletid.', `gift`, `start`, `end`, `user`, `remark`, `point`, true, '.$overridePoint.','.$interventionOrigine.' FROM Ticketing.Intervention where id=?;
+	static function setNewInterventionOverride($interventionOrigine,$bookletid,$overridePoint,$key){
+		$sql = 'INSERT INTO TicketingIntervention (`publickey`,`customer_id`, `booklet_id`, `gift`, `start`, `end`, `user`, `remark`, `point`, `override`, `overridePoint`,`OriginalIntervention`)
+				SELECT '."'".$key."'".',`customer_id`, '.$bookletid.', `gift`, `start`, `end`, `user`, `remark`, `point`, true, '.$overridePoint.','.$interventionOrigine.' FROM TicketingIntervention where id=?;
 				COMMIT;';
 		//echo nl2br($sql).'<br>';
 		return DbCo::getQuery($sql,[$interventionOrigine]);
 	}
 
 	static function getListBooklet($customerid){
-		$sql = 'SELECT b.id, b.initialpoint-sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0)) as solde FROM Ticketing.Booklet as b 
-		LEFT JOIN Ticketing.Intervention as i on b.id=i.booklet_id 
+		$sql = 'SELECT b.id, b.initialpoint-sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0)) as solde FROM TicketingBooklet as b 
+		LEFT JOIN TicketingIntervention as i on b.id=i.booklet_id 
 		WHERE b.archive=0 and b.customer_id=?
 		GROUP BY b.id HAVING solde>0 
 		ORDER BY solde asc;';
@@ -463,16 +496,126 @@ class Query{
 	}
 
 	static function getAllNextCloudUser(){
-		$sql = 'SELECT displayname, uid FROM nextcloud.oc_users
-				WHERE not isnull(displayname);';
+		$sql = 'SELECT u.displayname, u.uid FROM oc_users as u
+				JOIN oc_group_user as g on u.uid=g.uid
+				WHERE not isnull(displayname) and g.gid=?;';
 
-		return DbCo::getQuery($sql,[]);
+		return DbCo::getQuery($sql,['Ticketing']);
 	}
 
 	static function getFoundIdIntervention($customer_id,$booklet_id,$point){
-		$sql = 'SELECT max(id) as id FROM Ticketing.Intervention
+		$sql = 'SELECT max(id) as id FROM TicketingIntervention
 				WHERE `customer_id`=? and `booklet_id`=? and `point`=?';
 
 		return DbCo::getQuery($sql,[$customer_id,$booklet_id,$point]);
 	}
+
+	static function getlastCustomer($name){
+		$sql = 'SELECT max(id) as id FROM TicketingCustomer
+				WHERE `name`=?';
+
+		return DbCo::getQuery($sql,[$name]);
+	}
+
+	static function getFromShaToID($publicKey,$table){
+		$sql = 'SELECT max(id) as id FROM `'.$table.'`
+				WHERE publickey=?';
+
+		return DbCo::getQuery($sql,[$publicKey]);
+	}
+
+	static function setPublicKey($id,$publicKey){
+		$sql = 'UPDATE TicketingCustomer
+				SET publickey=?
+				WHERE id=?';
+
+		return DbCo::getQuery($sql,[$publicKey,$id]);
+	}
+
+	static function getEditUser($user){
+		$sql = 'SELECT uid FROM oc_group_user
+				WHERE gid=? and uid=?';
+
+		return DbCo::getQuery($sql,['Ticketing',$user]);
+	}
+
+	static function createTable(){
+		$sql = '
+		CREATE TABLE IF NOT EXISTS `TicketingCustomer` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+			`publickey` varchar(45) NOT NULL,
+			`name` varchar(128) NOT NULL,
+			`isactif` tinyint(1) NOT NULL DEFAULT 1,
+			PRIMARY KEY (`id`),
+			UNIQUE KEY `publickey` (`publickey`)
+		  ) ;
+
+		CREATE TABLE IF NOT EXISTS  `TicketingBooklet` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+            `publickey` varchar(45) NOT NULL,
+			`customer_id` int(11) NOT NULL,
+			`createmoment` timestamp NOT NULL DEFAULT current_timestamp(),
+			`initialpoint` int(11) NOT NULL,
+			`archive` tinyint(1) NOT NULL DEFAULT 0,
+			PRIMARY KEY (`id`),
+			KEY `customer_id` (`customer_id`),
+            UNIQUE KEY `publickey` (`publickey`)
+			)  ;
+
+		CREATE TABLE IF NOT EXISTS `TicketingIntervention` (
+			`id` int(11) NOT NULL AUTO_INCREMENT,
+            `publickey` varchar(45) NOT NULL,
+			`customer_id` int(11) NOT NULL,
+			`booklet_id` int(11) NOT NULL,
+			`gift` tinyint(1) NOT NULL DEFAULT 0,
+			`start` datetime NOT NULL,
+			`end` datetime NOT NULL,
+			`user` varchar(45) NOT NULL,
+			`remark` text NOT NULL,
+			`point` int(11) NOT NULL DEFAULT 0,
+			`override` tinyint(1) NOT NULL DEFAULT 0,
+			`overridePoint` int(11) NOT NULL DEFAULT 0,
+			`OriginalIntervention` int(11) NOT NULL,
+			PRIMARY KEY (`id`),
+			KEY `customer_id` (`customer_id`,`booklet_id`),
+			KEY `customer_id_2` (`customer_id`),
+			KEY `carnet_id` (`booklet_id`),
+			KEY `user` (`user`),
+            UNIQUE KEY `publickey` (`publickey`)
+		  ) ;
+		';
+
+
+		return DbCo::getQuery($sql,[]);
+	}
+    
+    static function getSha($table,$sha){
+		$sql = 'SELECT count(*) as count FROM `'.$table.'`
+				WHERE publickey=?';
+
+		$result = DbCo::getQuery($sql,[$sha]);
+
+        return $result[0]['count'];
+	}
+
+    static function getGroup(){
+		$sql = 'SELECT * FROM `oc_groups`';
+
+		return DbCo::getQuery($sql,[]);
+	}
+
+    static function setGroup($label){
+		$sql = 'INSERT IGNORE INTO `oc_groups`(`gid`, `displayname`) VALUES (?,?);';
+
+		return DbCo::getQuery($sql,[$label,$label]);
+	}
+    static function addUserInGroup($labelGroup,$labelAdmin){
+		$sql = "INSERT IGNORE INTO `oc_group_user`(`gid`, `uid`) 
+                SELECT '$labelGroup', `uid` from `oc_group_user`
+                WHERE `gid`=?;
+        ";
+
+		return DbCo::getQuery($sql,[$labelAdmin]);
+	}
+
 }

@@ -24,11 +24,13 @@ class PageController extends Controller {
 	 *          add it to any other method if you don't exactly know what it does
 	 *
 	 * @NoAdminRequired
+     * @publicpage
 	 * @NoCSRFRequired
 	 */
 
 	 /**
       * @NoAdminRequired
+      * @publicpage
       * @NoCSRFRequired
       */
 	public function index() {
@@ -37,6 +39,7 @@ class PageController extends Controller {
 
 	/**
       * @NoAdminRequired
+      * @publicpage
       * @NoCSRFRequired
       */
 	public function indexPOST() {

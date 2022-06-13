@@ -11,6 +11,8 @@ return [
     'routes' => [
 	   ['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 	   ['name' => 'page#indexPOST', 'url' => '/', 'verb' => 'POST'],
-	   ['name' => 'page#do_echo', 'url' => '/echo', 'verb' => 'POST'],
+	   ['name' => 'PublicAPI#get', 'url' => '/display/{token}', 'verb' => 'GET'],
+	   ['name' => 'PublicAPI#getPOST', 'url' => '/display/{token}', 'verb' => 'POST']
+	 
     ]
 ];

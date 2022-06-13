@@ -177,6 +177,11 @@ class Form
 		return $this->itemItin[$count - 1];
 	}
 
+	/**
+	 * force le champ à etre pris en consideration dans lors de l'update
+	 * @param bool $value 
+	 * @return void 
+	 */
 	function setForceUpdate($value)
 	{
 		$this->forceUpdate = $value;
@@ -268,7 +273,7 @@ class Form
 					}
 				}
 			} else if ($type == 'int') {
-				$this->addItem(new Text($name, $name));
+				$this->addItem(new Number($name, $name));
 				$this->getItem($name)->setDefaultValue($default);
 			} else if ($type == 'float') {
 				$this->addItem(new Text($name, $name));
@@ -277,10 +282,10 @@ class Form
 				$this->addItem(new Text($name, $name));
 				$this->getItem($name)->setDefaultValue($default);
 			} else if ($type == 'smallint') {
-				$this->addItem(new Text($name, $name));
+				$this->addItem(new Number($name, $name));
 				$this->getItem($name)->setDefaultValue($default);
 			} else if ($type == 'bigint') {
-				$this->addItem(new Text($name, $name));
+				$this->addItem(new Number($name, $name));
 				$this->getItem($name)->setDefaultValue($default);
 			} else if ($type == 'char' and (int)$option > 0) {
 				$this->addItem(new Text($name, $name));
@@ -458,7 +463,7 @@ class Form
 
 			$this->debug('UpdateValueOldNew', $item->getName(), $item->getSelectValue() . ' - ' . $item->getValue());
 
-			if ($item->getItemIsUpdatable() and $item->getUpdatable() and $item->getSelectValue() !== $item->getValue()) {
+			if (($item->getForceValue()!=null) or ($item->getItemIsUpdatable() and $item->getUpdatable() and $item->getSelectValue() !== $item->getValue())) {
 
 				if ($item->getTableChamp() != null) {
 					if ($set != '') $set .= ', ';
@@ -747,6 +752,7 @@ abstract class FormItem
 	protected $POSTValue = false;
 	protected $postExist = false;
 	protected $readOnly = false;
+	protected $setForceValue = false;
 	protected $forceValue = null;
 	protected $SQLBuilder = false;
 	protected $autoCompletion = true;
@@ -967,6 +973,12 @@ abstract class FormItem
 	{
 		$this->tooltip = array('body' => $body, 'title' => $title);
 	}
+
+	/** defini si l'element sera afficher sur le formulaire ou s'il sera uniquement pris en charge coté backend 
+	 * sans possibilité pour l'utilisateur d'interagir avec
+	 * @param bool $value 
+	 * @return void 
+	 */
 	function setEnable($value)
 	{
 		$this->enable = $value;
@@ -1113,9 +1125,11 @@ abstract class FormItem
 
 	function forceValue($value)
 	{
+		$this->setforceValue = true;
 		$this->forceValue = $value;
 		$_SESSION[$this->getFullName()]=$value;
 	}
+
 	function getForceValue()
 	{
 		return $this->forceValue ;
@@ -1776,7 +1790,8 @@ class SQLBuilder
 
 	function constructData()
 	{
-		$data = DbCo::getListOfJoin();
+		//$data = DbCo::getListOfJoin();
+        $data=array();
 		$result = array();
 		foreach ($data as $line) {
 			$table = $line['nameOfTable'];
@@ -1785,7 +1800,8 @@ class SQLBuilder
 			$subQuery = $line['subQuery'];
 
 			if ($subQuery == '') {
-				$d = DbCo::showFull($db, $table);
+				//$d = DbCo::showFull($db, $table);
+                $d=array();
 				foreach ($d as $l) {
 					$champ = $l['Field'];
 					$result[] = $alias . '.' . $champ;
@@ -3167,13 +3183,13 @@ class DataViewer2
 		// forcevalue ='' afin de réinitialiser la commande éventuelle
 		$this->formFilter->getItem('Option')->forceValue('');
 		// création du champ PAGE pour la pagination
-		$this->formFilter->addItem(new Number('Page'));
-		$this->formFilter->getItem('Page')->setDefaultValue(1);
-		self::setEvent($this->formFilter->getItem('Page'),'','change');
-		//$this->formFilter->getItem('Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
+		$this->formFilter->addItem(new Number('_Page'));
+		$this->formFilter->getItem('_Page')->setDefaultValue(1);
+		self::setEvent($this->formFilter->getItem('_Page'),'','change');
+		//$this->formFilter->getItem('_Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
 
-		$this->formFilter->getItem('Page')->setAutoCompletion(false);
-		$this->formFilter->getItem('Page')->addClass('minimumSize');
+		$this->formFilter->getItem('_Page')->setAutoCompletion(false);
+		$this->formFilter->getItem('_Page')->addClass('minimumSize');
 
 		// création du champ Pagination pour la pagination
 		$this->formFilter->addItem(new Number('Pagination'));
@@ -3241,6 +3257,7 @@ class DataViewer2
 				$this->formFilter->addItem(new Text($alias));
 				//$this->formFilter->addItem(new Item('<br>'));
 				$this->formFilter->getItem($alias)->addClass('width100');
+				$this->formFilter->getItem($alias)->addClass('DataViewer2Search');
 				//$this->formFilter->getItem($alias)->addClass('whereinput');
 				//$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
 				self::setEvent($this->formFilter->getItem($alias),'','change');
@@ -3251,6 +3268,7 @@ class DataViewer2
 			$this->formFilter->addItem(new Enum($aliasSort,null,['','ASC','DESC']));
 			//$this->formFilter->addItem(new Item('<br>'));
 			$this->formFilter->getItem($aliasSort)->addClass('width100');
+			$this->formFilter->getItem($aliasSort)->addClass('DataViewer2Search');
 			//$this->formFilter->getItem($aliasSort)->addClass('minimumSize');
 			$this->formFilter->getItem($aliasSort)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
 			self::setEvent($this->formFilter->getItem($aliasSort),'','change');
@@ -3379,7 +3397,7 @@ class DataViewer2
 
 		// Si commande reset, ne pas oublier de formater les valeurs par defaut des autres element de formulaire
 		if($option==='RESET'){
-			$this->formFilter->getItem('Page')->forceValue(1);
+			$this->formFilter->getItem('_Page')->forceValue(1);
 			$this->formFilter->getItem('Pagination')->forceValue($this->pagination);
 			$this->formFilter->getItem('Global_Search')->forceValue('');
 			$this->formFilter->getItem('Global_Search')->setDefaultValue(false);
@@ -3473,6 +3491,7 @@ class DataViewer2
 				if($this->formFilter->getItem($field)!==null){
 					
 					$tmp[$field].=$this->formFilter->getItem($field)->toString();
+					//$tmp[$field].='<br>';
 					$tmp[$field].=$this->formFilter->getItem($fieldSort)->toString();
 				
 				}
@@ -3610,7 +3629,7 @@ class DataViewer2
 
 	function adaptPage($correction=true){
 		// definition des seuils acceptables de PAGINATION
-		$page = $this->formFilter->getItem('Page')->getValue();
+		$page = $this->formFilter->getItem('_Page')->getValue();
 		$pagination = $this->formFilter->getItem('Pagination')->getValue();
 		$count = $this->getCount();
 		
@@ -3628,18 +3647,18 @@ class DataViewer2
 		
 		$max=ceil($count/$pagination);
 		// definition des seuils acceptables de PAGE
-		$this->formFilter->getItem('Page')->setMinMax($min,$max);
+		$this->formFilter->getItem('_Page')->setMinMax($min,$max);
 		
 		// réinitialisation à la valeur par defaut si la valeurs sort des cadres spécifier
 		if((!is_numeric($page) or $page>$max or $page<$min) and $correction){
-			$this->formFilter->getItem('Page')->forceValue($min);
+			$this->formFilter->getItem('_Page')->forceValue($min);
 		}
 
 
 		
 
 		// stockage des valeurs finals acceptables
-		$this->currentPage = $this->formFilter->getItem('Page')->getValue();
+		$this->currentPage = $this->formFilter->getItem('_Page')->getValue();
 		$this->currentPagination = $this->formFilter->getItem('Pagination')->getValue();
 	}
 
@@ -3657,7 +3676,7 @@ class DataViewer2
 		$cal = ceil($this->getCount() / $this->currentPagination);
 		
 
-		return 'Page ' . $this->formFilter->getItem('Page')->toString() . ' of ' . $cal . ' - ' . $this->formFilter->getItem('Pagination')->toString() . ' by page ' ;
+		return '<span>Page ' . $this->formFilter->getItem('_Page')->toString() . ' of ' . $cal . ' - ' . $this->formFilter->getItem('Pagination')->toString() . ' by page <span>' ;
 	}
 
 	function cleanDataset($dataset){
@@ -3836,6 +3855,7 @@ class DataViewer2
 		}
 		return $this->dataset;
 	}
+
 	function setDataset($dataset){
 		if($this->datasetFinal!==null){
 			$this->datasetFinal=$dataset;
@@ -4088,8 +4108,15 @@ class SQL
 		if($this->distinct===true){
 			$distinct = 'DISTINCT ';
 		}
-
-		return 'SELECT ' .$distinct. $str . ' FROM `' . $this->primaryTable['db'] . '`.`' . $this->primaryTable['table'] . '` AS `' . $this->primaryTable['alias'] . '`';
+		
+		
+		if($this->primaryTable['db']!=''){
+			$name = '`' . $this->primaryTable['db'] . '`.`' . $this->primaryTable['table'] . '` AS `' . $this->primaryTable['alias'] . '`';
+		}
+		else{
+			$name = '`' . $this->primaryTable['table'] . '` AS `' . $this->primaryTable['alias'] . '`';
+		}
+		return 'SELECT ' .$distinct. $str . ' FROM '.$name;
 	}
 	function showJoin()
 	{
@@ -4099,7 +4126,13 @@ class SQL
 				$str .= chr(13);
 			}
 			if($line['subquery']==0){
-				$str .= $line['type'] . ' JOIN `' . $line['db'] . '`.`' . $line['table'] . '` AS ' . $line['alias'] . ' ON ' . $line['onClause'];
+				if($line['db']!=''){
+					$str .= $line['type'] . ' JOIN `' . $line['db'] . '`.`' . $line['table'] . '` AS ' . $line['alias'] . ' ON ' . $line['onClause'];
+				}
+				else{
+					$str .= $line['type'] . ' JOIN `' . $line['table'] . '` AS ' . $line['alias'] . ' ON ' . $line['onClause'];
+	
+				}
 			}else{
 				$str .= $line['type'] . ' JOIN (' . $line['table']. ') AS ' . $line['alias'] . ' ON ' . $line['onClause'];
 			}

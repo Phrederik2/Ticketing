@@ -61,7 +61,7 @@ class Cadre_Base
 
         if ($useCache == true) {
 
-            $this->setCache($this->key);
+           
         }
         if ($useCache == false or $this->recupCache() != true) {
 
@@ -126,7 +126,7 @@ class Cadre_Base
                 
                 $reference = $GLOBALS[$keyGlobal];
             }else{
-                $GLOBALS[$keyGlobal]= DbCo::getFolder($keyGlobal);
+               // $GLOBALS[$keyGlobal]= DbCo::getFolder($keyGlobal);
                 $reference = $GLOBALS[$keyGlobal];
             }
 
@@ -186,58 +186,7 @@ class Cadre_Base
         return $this->link;
     }
 
-    function getViewException($data, $column, $filterException, $hidden = null, $isComment = 0)
-    {
-
-        $dataNew = array();
-        foreach ($data as $item) {
-            if (isset($item[$column])) {
-
-                $ex = $item[$column];
-
-                foreach ($filterException as $value) {
-                    if (strpos($ex, $value['name']) !== false) {
-
-                        $t = new Exception2_Frame();
-                        $t->setIsComment($isComment);
-                        $t->setListException($filterException);
-                        $t->setResultFilter($value['name']);
-                        if ($hidden != null) {
-                            foreach ($hidden as $line) {
-                                if ($line["Filter"] == $value['name']) {
-                                    $t->setUntil($line["until"]);
-
-                                }
-                            }
-                        }
-                        $t->setKey($this->getKey());
-                        $t->init();
-
-                        $result = $t->toString();
-                        $ex = str_replace($value['name'], $result, $ex);
-                        $item[$column] = $ex;
-                    }
-                }
-            }
-
-            array_push($dataNew, $item);
-        }
-
-        return $dataNew;
-
-    }
-
-    /**
-     * si la global n'existe pas, récupere le cache en DB et l'envoi dans la global
-     *
-     * @return void
-     */
-    function setCache()
-    {
-        if ($this->key != null and !isset($GLOBALS["Cache::" . $this->key])) {
-            $GLOBALS["Cache::" . $this->key] = DbCo::getCache($this->key);
-        }
-    }
+    
 
     /**
      * si existe, récupere le cache dans la global et tente de recomposé l'object (onglet)

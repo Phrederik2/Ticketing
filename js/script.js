@@ -27,17 +27,18 @@ $(function(){
     $.switcher('.ONOFF');
 }); 
 
-$( function() {
+/*$( function() {
     $( ".tabs" ).tabs();
- } );
+ } );*/
 
 
  $('textarea[edit=true]').trumbowyg(
     {
-        
+        resetCss: true,
+        removeformatPasted: true,
         semantic: false,
         btns: [
-            ['viewHTML'],
+           /* ['viewHTML'],*/
             ['undo', 'redo'], 
             ['custom'],
             ['formatting'],
@@ -53,11 +54,25 @@ $( function() {
             ['unorderedList', 'orderedList'],
             ['horizontalRule'],
             ['removeformat'],
-            ['historyUndo', 'historyRedo'],
+           /* ['historyUndo', 'historyRedo'],*/
             ['fullscreen']
             
         ]
     
     }
    );  
+
+   
+  /*  $('.tabs').notice({
+        text: "Info message",
+        type: "Error",
+        canAutoHide: false,
+        holdup: "5000"
+    });*/
+
+/*
+$('textarea[edit=true]').closest(".trumbowyg-box").css("min-height", "500px");
+$('textarea[edit=true]').prev(".trumbowyg-editor").css("min-height", "500px");
+$('textarea[edit=true]').css("min-height", "500px");*/
+
 

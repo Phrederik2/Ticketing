@@ -5,14 +5,14 @@
     <name>Ticketing</name>
     <summary>Systeme de ticketing</summary>
     <description><![CDATA[Systeme de ticketing]]></description>
-    <version>0.0.1</version>
+    <version>0.7.6.8</version>
     <licence>agpl</licence>
     <author mail="phrederik2@gmail.com" >Evrard Frederic</author>
     <namespace>Ticketing</namespace>
     <category>organization</category>
     <bugs>http://nexttest.makeitsimple.be/Projet/index.php</bugs>
     <dependencies>
-        <nextcloud min-version="12" max-version="12"/>
+        <nextcloud min-version="12" max-version="24"/>
     </dependencies>
     <navigations>
         <navigation>
