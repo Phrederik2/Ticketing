@@ -7,8 +7,13 @@ include_once ('TOOL/form.php');
 include_once ('DAL/dbco.php');
 include_once ('TEMPLATE/V_customer.php');
 
-//echo 'IMPORT OK';
 $c = new customer_Frame();
-//include_once ('BASE/before.php');
-echo '<div id="Page"><div class="tabs">'.$c->getOnglet(0)->showCorp().'</div></div>';
-//include_once ('BASE/after.php');
+
+$str = '<div id="Page"><div class="tabs">'.$c->getOnglet(0)->showCorp().'</div></div>';
+
+if($c->cleanAllSessionAndReturn===false){
+    echo $str;
+}
+else{
+    $c->cleanAllSessionAndReturn();
+}

@@ -4,6 +4,7 @@ class customer_Frame extends Cadre_Base
 
     private $user = '';
     private $canEdit = false;
+    public $cleanAllSessionAndReturn = false;
 
     function __construct($key = null, $useCache = false)
     {
@@ -54,6 +55,7 @@ class customer_Frame extends Cadre_Base
         //Selection du formulaire à afficher
 
         // si le GET contient 'Booklet' alors vue Intervention
+
         if (Tool::getOption('carnet')) {
             $GLOBALS['Title'] = 'Intervention';
             $this->onglet = new Onglet('Ticketing::Intervention');
@@ -85,16 +87,17 @@ class customer_Frame extends Cadre_Base
             $_POST['client'] = $id[0]['publickey'];
         }
 
-        if ($this->canEdit) $tmp[] = Tool::link('Client', Tool::url([], false));
+        if ($this->canEdit) $tmp[] = Tool::buttonLink('Client', Tool::url([], false));
 
-        if (Tool::getOption('client')) $tmp[] = Tool::link('Carnet', Tool::url(['client' => Tool::getOption('client')], false));
-        if (Tool::getOption('carnet')) $tmp[] = Tool::link('Intervention', Tool::url(['client' => Tool::getOption('client'), 'carnet' => Tool::getOption('carnet')], false));
+        if (Tool::getOption('client')) $tmp[] = Tool::buttonLink('Carnet', Tool::url(['client' => Tool::getOption('client')], false));
+        if (Tool::getOption('carnet')) $tmp[] = Tool::buttonLink('Intervention', Tool::url(['client' => Tool::getOption('client'), 'carnet' => Tool::getOption('carnet')], false));
 
+        $str = '<input type="button" href="https://fr.w3docs.com/" value="Cliquez sur moi" >';
         $str = '';
         //$str.='['.$this->user.']::['.(bool)$this->canEdit.']::';
         foreach ($tmp as $nav) {
             if ($str != '') {
-                $str .= ' > ';
+                $str .= ' ';
             }
             $str .= $nav;
         }
@@ -110,9 +113,6 @@ class customer_Frame extends Cadre_Base
 
         $key = '850d4394eebc3760c94a207db6683e2d6d0afacc';
         $uniquekey = 'SplitIntervention' . $key;
-
-
-
 
         if (Tool::getOption('split') and Tool::getTransaction(Tool::getOption('split')) !== null) {
             $_SESSION[$uniquekey] = Tool::getOption('split');
@@ -191,8 +191,12 @@ class customer_Frame extends Cadre_Base
 
             if ($rest > 0) {
                 $iPoint = 40;
+                $data = Query::getCustomer($customerid);
+                $nbr = Query::getNbrBookletCustomer($customerid);
+                $name = $data[0]['name'] . '_' . $nbr[0]['count'] + 1;
+
                 if ($rest > $iPoint) {
-                    Query::setNewCarnet($customerid, $rest, $this->getShaBooklet());
+                    Query::setNewCarnet($customerid, $rest, $this->getShaBooklet(), $name);
                     $TPoint = $rest;
 
                     $title = 'Création d\'un nouveau carnet.';
@@ -200,7 +204,7 @@ class customer_Frame extends Cadre_Base
 
                     $this->addNotification(null, $message, $title, 'Notif');
                 } else {
-                    Query::setNewCarnet($customerid, $iPoint, $this->getShaBooklet());
+                    Query::setNewCarnet($customerid, $iPoint, $this->getShaBooklet(), $name);
                     $TPoint = $iPoint;
 
                     $title = 'Création d\'un nouveau carnet.';
@@ -223,7 +227,28 @@ class customer_Frame extends Cadre_Base
 
                 $this->addNotification(null, $message, $title, 'Notif');
             }
+            $this->cleanAllSessionAndReturn = true;
         }
+    }
+
+    function sqlCustomer($active = 0)
+    {
+        $sql = new SQL(DbCo::getDbName(), 'TicketingCustomer', 'c');
+        $sql->setPrimaryField('c', 'id');
+        $sql->addField('c', 'id', 'ID');
+        $sql->addField('c', 'publickey', 'publickey');
+        $sql->addField('c', 'name', 'Nom du client');
+        $sql->addFunction('b.initialpoint', 'Point Initial');
+        $sql->addFunction('i.point', 'Point utilisé');
+        $sql->addFunction('b.initialpoint-i.point', 'Point Restant');
+        $sql->addSubQueryJoin('SELECT customer_id, sum(initialpoint) as initialpoint FROM TicketingBooklet where archive=0 group by customer_id', 'b', 'c.id=b.customer_id', 'LEFT');
+        $sql->addSubQueryJoin('SELECT i.customer_id, sum(if(i.override=0,i.point,i.overridepoint)) as point FROM TicketingBooklet as b
+								join TicketingIntervention as i on b.id=i.booklet_id and i.gift=0 and i.isdelete=0
+								where archive=0 group by i.customer_id', 'i', 'c.id=i.customer_id', 'LEFT');
+        $sql->addWhere('c.isactif=?', [!$active]);
+        $sql->addGroupBy('c.id');
+
+        return $sql;
     }
 
     function customer()
@@ -241,24 +266,9 @@ class customer_Frame extends Cadre_Base
         // récupere la valeur du switcher pour l'intégrer dans la requete
         $active = $ff->getItem('Voir Client inactif')->getValue();
 
-        // création de l'objet SQL
-        $sql = new SQL(DbCo::getDbName(), 'TicketingCustomer', 'c');
-        $sql->setPrimaryField('c', 'id');
-        $sql->addField('c', 'id', 'ID');
-        $sql->addField('c', 'publickey', 'publickey');
-        $sql->addField('c', 'name', 'Nom du client');
-        $sql->addFunction('b.initialpoint', 'Point Initial');
-        $sql->addFunction('i.point', 'Point utilisé');
-        $sql->addFunction('b.initialpoint-i.point', 'Point Restant');
-        $sql->addSubQueryJoin('SELECT customer_id, sum(initialpoint) as initialpoint FROM TicketingBooklet where archive=0 group by customer_id', 'b', 'c.id=b.customer_id', 'LEFT');
-        $sql->addSubQueryJoin('SELECT i.customer_id, sum(if(i.override=0,i.point,i.overridepoint)) as point FROM TicketingBooklet as b
-								join TicketingIntervention as i on b.id=i.booklet_id and i.gift=0
-								where archive=0 group by i.customer_id', 'i', 'c.id=i.customer_id', 'LEFT');
-        $sql->addWhere('c.isactif=?', [!$active]);
-        $sql->addGroupBy('c.id');
 
         // créaction du dataviewer sur base de l'object SQL
-        $view = new DataViewer2('Customer', $sql);
+        $view = new DataViewer2('Customer', $this->sqlCustomer($active));
 
         // si le sous-formulaire est appeller, alors vider la commande du formulaire principale pour supprimer toutes les actions en cours
         if ($ff->getPostExist() == true) {
@@ -285,10 +295,8 @@ class customer_Frame extends Cadre_Base
             $form = $view->getForm();
             //modification des label (title)
             $form->getElement('name')->setTitle('Nom du client');
+            $form->getItem('name')->setRequired(true);
             $form->getItem('publickey')->setEnable(false);
-
-
-
 
             $fieldset = new FieldSet('Edition');
             $fieldset->add_HTML_Class('Box');
@@ -306,8 +314,7 @@ class customer_Frame extends Cadre_Base
         // integration des lien 
         foreach ($dataset as $nb => &$line) {
             if ($nb > 0) {
-                $line['Nom du client'] = Tool::link($line['Nom du client'], Tool::url(['client' => $line['publickey'], 'carnet' => null]));
-
+                $line['Edit'] .= Tool::buttonLink('Ouvrir', Tool::url(['client' => $line['publickey'], 'carnet' => null]));
                 if ($line['Point Restant'] == 0) {
                     $line['Point Restant'] = '<span class="bad">' . $line['Point Restant'] . '</span>';
                 } else if ($line['Point Restant'] < 5) {
@@ -346,6 +353,26 @@ class customer_Frame extends Cadre_Base
         return $tab;
     }
 
+    function sqlBooklet($archive = 0, $id = 0)
+    {
+        $sql = new SQL(DbCo::getDbName(), 'TicketingBooklet', 'c');
+        $sql->setPrimaryField('c', 'id');
+        $sql->addField('c', 'id', 'ID');
+        $sql->addField('c', 'name', 'Nom');
+        $sql->addField('c', 'createmoment', 'Creation');
+        $sql->addField('c', 'initialpoint', 'Nombre de point initale');
+        $sql->addFunction('sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0))', 'Somme point utilisé');
+        $sql->addFunction('c.initialpoint-sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0))', 'Solde');
+        $sql->addFunction('sum(if(i.gift=1,if(i.override=0,i.point,i.overridepoint),0))', 'Cadeaux');
+        $sql->addJoin(DbCo::getDbName(), 'TicketingIntervention', 'i', 'c.id=i.booklet_id', 'LEFT');
+        $sql->addWhere('c.archive=?', [$archive]);
+        $sql->addWhere('c.customer_id=?', [$id]);
+        $sql->addWhere('(i.isdelete=0 or isnull(i.isdelete))');
+        $sql->addGroupBy('c.id');
+
+        return $sql;
+    }
+
     function booklet($id)
     {
         $tab = new Tab('Carnet');
@@ -359,20 +386,7 @@ class customer_Frame extends Cadre_Base
 
         $archive = $ff->getItem('Voir Carnet Archivé')->getValue();
 
-        $sql = new SQL(DbCo::getDbName(), 'TicketingBooklet', 'c');
-        $sql->setPrimaryField('c', 'id');
-        $sql->addField('c', 'id', 'ID');
-        $sql->addField('c', 'createmoment', 'Creation');
-        $sql->addField('c', 'initialpoint', 'Nombre de point initale');
-        $sql->addFunction('sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0))', 'Somme point utilisé');
-        $sql->addFunction('c.initialpoint-sum(if(i.gift!=1,if(i.override=0,i.point,i.overridepoint),0))', 'Solde');
-        $sql->addFunction('sum(if(i.gift=1,if(i.override=0,i.point,i.overridepoint),0))', 'Cadeaux');
-        $sql->addJoin(DbCo::getDbName(), 'TicketingIntervention', 'i', 'c.id=i.booklet_id', 'LEFT');
-        $sql->addWhere('c.archive=?', [$archive]);
-        $sql->addWhere('c.customer_id=?', [$id]);
-        $sql->addGroupBy('c.id');
-
-        $view = new DataViewer2('Booklet', $sql, $this->canEdit);
+        $view = new DataViewer2('Booklet', $this->sqlBooklet($archive, $id), $this->canEdit);
         //$view->setDebug(true);
 
         $view->partialInit();
@@ -397,6 +411,16 @@ class customer_Frame extends Cadre_Base
         if ($view->getForm() != null) {
             $form = $view->getForm();
             $form->getItem('publickey')->setEnable(false);
+            $form->getElement('name')->setTitle('Nom');
+
+            // si Name = vide, name = [nomduclient]_[nombre de carnet]+1
+            $data = Query::getCustomer($id);
+            $nbr = Query::getNbrBookletCustomer($id);
+            $form->getItem('name')->setRequired(true);
+
+            $form->getItem('name')->setDefaultValue($data[0]['name'] . '_' . $nbr[0]['count'] + 1);
+
+
             $form->getElement('initialpoint')->setTitle('Nombre de point initiale');
             $form->getItem('initialpoint')->setDefaultValue('40');
 
@@ -414,26 +438,36 @@ class customer_Frame extends Cadre_Base
 
         foreach ($dataset as $nb => &$line) {
             if ($nb > 0) {
-                $line['ID'] = Tool::link($line['ID'], Tool::url(['carnet' => $line['ID']]));
+
+                $line['Edit'] .= Tool::buttonLink('Ouvrir', Tool::url(['carnet' => $line['ID']]));
                 if ($line['Solde'] == 0) {
                     $line['Solde'] = '<span class="bad">' . $line['Solde'] . '</span>';
                 } else if ($line['Solde'] < 5) {
                     $line['Solde'] = '<span class="medium">' . $line['Solde'] . '</span>';
                 }
             }
+            unset($line['ID']);
         }
         unset($line);
 
         $view->setDataset($dataset);
 
 
-        $data = Query::getCustomer($id);
+
+
 
         $fieldset = new FieldSet('Détail du client selectionné');
         $fieldset->add_HTML_Class('Box');
         if (isset($data[0]['name'])) {
             $fieldset->add(new Field('Nom du client', $data[0]['name']));
         }
+
+        if ($view->getForm() != null and $view->getForm()->getInsert() === true) {
+            $this->addNotification(null, 'Votre carnet à ete crée!', 'Nouveau Carnet crée', 'Notif');
+            $this->cleanAllSessionAndReturn = true;
+        }
+
+
         $fieldset->add($ff);
         //$fieldset->add(new Item('<br>'));
 
@@ -443,16 +477,8 @@ class customer_Frame extends Cadre_Base
         return $tab;
     }
 
-    function intervention($booklet)
+    function sqlIntervention($customer = 0, $booklet = 0)
     {
-        $tab = new Tab('Intervention');
-
-        $customer = Query::getCustomerByBooklet($booklet)[0]['customer_id'];
-        $tab->addItem($this->navigationBand());
-        $this->getNotification($tab);
-
-        $tab->setActive(true);
-
         $sql = new SQL(DbCo::getDbName(), 'TicketingIntervention', 'i');
         $sql->setPrimaryField('i', 'id');
         $sql->addField('i', 'id', 'ID');
@@ -467,9 +493,27 @@ class customer_Frame extends Cadre_Base
 
         $sql->addWhere('i.customer_id=?', [$customer]);
         $sql->addWhere('i.booklet_id=?', [$booklet]);
+        $sql->addWhere('i.isdelete=0');
         $sql->addGroupBy('i.id');
+        $sql->addOrderBy('i.start', 'DESC');
+        $sql->addOrderBy('i.end', 'DESC');
 
-        $view = new DataViewer2('Intervention', $sql, $this->canEdit);
+        return $sql;
+    }
+
+    function intervention($booklet)
+    {
+        $tab = new Tab('Intervention');
+
+        $customer = Query::getCustomerByBooklet($booklet)[0]['customer_id'];
+        $tab->addItem($this->navigationBand());
+        $this->getNotification($tab);
+
+        $tab->setActive(true);
+
+
+
+        $view = new DataViewer2('Intervention', $this->sqlIntervention($customer, $booklet), $this->canEdit);
         //$view->setDebug(true);
 
         $view->partialInit();
@@ -530,6 +574,8 @@ class customer_Frame extends Cadre_Base
             $form->getElement('end')->setTitle('Fin');
             $form->getItem('end')->cleanClass();
 
+            $form->getElement('isdelete')->setTitle('Suppression');
+
             $fieldset = new FieldSet('Edition');
             $fieldset->add_HTML_Class('Box');
             $fieldset->add($form);
@@ -538,29 +584,80 @@ class customer_Frame extends Cadre_Base
         }
 
         $data = Query::getBooklet($booklet);
+        if ($view->getForm() != null) {
+            $form = $view->getForm();
+
+            if (!$data[0]['sumpointremaining'] > 0) {
+                $form->getItem('gift')->setEnable(false);
+                $form->getItem('gift')->setDisplay(true);
+                $form->getItem('gift')->setToolTip('Inactif', 'Impossible de rendre gratuit une intervention dans un carnet qui ne possede pas de point.');
+            }
+
+
+            $view->setItemDisplay($fieldset);
+        }
+
         $fieldset = new FieldSet('Détail du carnet selectionné');
         if (isset($data[0]['name'])) {
             $fieldset->add(new Field('Nom du client', $data[0]['name']));
+            $fieldset->add(new Field('Nom du carnet', $data[0]['bookletName']));
             $fieldset->add(new Field('Nombre de point initale', $data[0]['initialpoint']));
             $fieldset->add(new Field('Somme des points utilisés', $data[0]['sumpointuse']));
             $fieldset->add(new Field('Somme des points cadeaux', $data[0]['sumpointgift']));
             $fieldset->add(new Field('Somme des points restant', $data[0]['sumpointremaining']));
+
+            $list = $fieldset->get();
+
+            foreach ($list as $element) {
+                $element->add_HTML_Class('bold');
+            }
             //$fieldset->add(new Item('<br>'));
         }
+
+        $split = false;
 
         if ($view->getForm() != null and ($view->getForm()->getUpdate() === true or $view->getForm()->getInsert() === true) and $data[0]['sumpointremaining'] < 0) {
 
             $form = $view->getForm();
 
             $this->splitProposal($form, $data[0]['sumpointremaining'], $tab);
+            $split = true;
+        }
+
+        if ($split === false and $view->getForm() != null and $view->getForm()->getInsert() === true) {
+            $this->cleanAllSessionAndReturn = true;
         }
 
         $tab->addItem($fieldset);
         $tab->addItem($view);
 
-
-
         return $tab;
+    }
+
+
+    function cleanAllSessionAndReturn()
+    {
+        $this->cleanSession('Customer', $this->sqlCustomer());
+        $this->cleanSession('Booklet', $this->sqlBooklet());
+        $this->cleanSession('Intervention', $this->sqlIntervention());
+
+        $t = ob_end_flush();
+        header('Location: ' . Tool::url([], false));
+
+        exit();
+    }
+
+    function cleanSession($name, SQL $sql)
+    {
+        $view = new DataViewer2($name, $sql, $this->canEdit);
+        $view->partialInit();
+        $filter = $view->getFormFilter();
+        if ($filter != null) {
+            $f = $filter->getItem();
+            foreach ($f as $i) {
+                $i->cleanSession();
+            }
+        }
     }
 
     /**
@@ -659,18 +756,19 @@ class customer_Frame extends Cadre_Base
      */
     function addNotification($tab = null, $message = '', $title = 'Split', $class = 'SplitNotif')
     {
-        $split = new FieldSet($title);
-        $split->add(new item($message));
-        $split->add_HTML_Class($class);
+
 
         if ($tab != null) {
-            $tab->addItem($split);
+            $n = new FieldSet($title);
+            $n->add(new item($message));
+            $n->add_HTML_Class($class);
+            $tab->addItem($n);
         } else {
             if (!isset($_SESSION['Notifications'])) {
                 $_SESSION['Notifications'] = array();
             }
 
-            $_SESSION['Notifications'][] = $split;
+            $_SESSION['Notifications'][] = ['title' => $title, 'message' => $message, 'class' => $class];
         }
     }
 
@@ -682,12 +780,18 @@ class customer_Frame extends Cadre_Base
      */
     function getNotification($tab)
     {
-        if (isset($_SESSION['Notifications'])) {
-            foreach ($_SESSION['Notifications'] as &$notif) {
-                $tab->addItem($notif);
-                unset($notif);
+        if ($this->cleanAllSessionAndReturn === false) {
+            if (isset($_SESSION['Notifications'])) {
+                foreach ($_SESSION['Notifications'] as $notif) {
+
+                    $n = new FieldSet($notif['title']);
+                    $n->add(new item($notif['message']));
+                    $n->add_HTML_Class($notif['class']);
+                    $tab->addItem($n);
+                    unset($notif);
+                }
+                unset($_SESSION['Notifications']);
             }
-            unset($_SESSION['Notifications']);
         }
     }
 
@@ -745,7 +849,7 @@ class customer_Frame extends Cadre_Base
             return $sha;
         } else {
             if ($recurcount >= 256) {
-                echo 'RECURSIF-' . $recurcount . ':' . $sha;
+                //echo 'RECURSIF-' . $recurcount . ':' . $sha;
                 exit;
             } else {
 

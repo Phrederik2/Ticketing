@@ -1,307 +1,310 @@
 :root {
-	
-	--background-color: rgba(7, 107, 107, 0.647);
-	--background-colorGradiant: radial-gradient(circle, rgba(0, 130, 201, 1) 0%, rgba(37, 171, 243, 1) 100%);
-	--background-colorLight: rgb(140, 210, 247);
-	--background-colorVeryLight: rgb(187, 226, 247);
-	--background-colorClear: rgb(247, 250, 252);
-	--fontColor: rgb(1, 39, 30);
-	--fontColorSplitNotif: rgb(219, 245, 232);
-	--fontColorNotif: rgb(230, 210, 206);
-	--fontColorLink: rgb(1, 71, 55);
-	--border: rgb(0, 0, 0);
-	--Notif: rgb(31, 249, 136);
-	--Medium: rgb(249, 249, 31);
-	--SplitNotif: rgb(247, 81, 35);
-	--shadow: rgba(0, 0, 0, 0.436);
+  --background-color: rgba(7, 107, 107, 0.647);
+  --background-colorGradiant: radial-gradient(
+    circle,
+    rgba(0, 130, 201, 1) 0%,
+    rgba(37, 171, 243, 1) 100%
+  );
+  --background-colorLight: rgb(140, 210, 247);
+  --background-colorVeryLight: rgb(187, 226, 247);
+  --background-colorClear: rgb(247, 250, 252);
+  --fontColor: rgb(1, 39, 30);
+  --fontColorSplitNotif: rgb(219, 245, 232);
+  --fontColorNotif: rgb(230, 210, 206);
+  --fontColorLink: rgb(1, 71, 55);
+  --border: rgb(0, 0, 0);
+  --Notif: rgb(31, 249, 136);
+  --Medium: rgb(249, 249, 31);
+  --SplitNotif: rgb(247, 81, 35);
+  --shadow: rgba(0, 0, 0, 0.436);
 }
 
 body {
-	background: var(--background-colorGradiant);
-	color: var(--fontColor);
-
+  background: var(--background-colorGradiant);
+  color: var(--fontColor);
 }
 
 #Page {
-	margin-left: auto;
-	margin-right: auto;
-	/*min-height: 10em;*/
-	display: table-cell;
-	vertical-align: middle;
-	width: 80%;
-	
+  margin-left: auto;
+  margin-right: auto;
+  /*min-height: 10em;*/
+  display: table-cell;
+  vertical-align: middle;
+  width: 80%;
 }
 
-fieldset, table{
-	
-	margin-top: 15px;
-	margin-left: 15px;
-	margin-right: 15px;
-	
-	background: var(--background-colorLight);
-	
+fieldset,
+table {
+  margin-top: 15px;
+  margin-left: 15px;
+  margin-right: 15px;
+
+  background: var(--background-colorLight);
 }
 
-input{
-    background: var(--background-colorVeryLight);
+input {
+  background: var(--background-colorVeryLight);
 }
 
-fieldset, table, .tooltips, .tooltipstext
-{
-    box-shadow: 7px 7px 7px var(--shadow);
+fieldset,
+table,
+.tooltips,
+.tooltipstext {
+  box-shadow: 7px 7px 7px var(--shadow);
 }
 
-fieldset{
-    padding-left: 15px;
-    padding-top: 15px;
-	padding-bottom: 15px;
+fieldset {
+  padding-left: 15px;
+  padding-top: 15px;
+  padding-bottom: 15px;
 }
 
 table {
-	width: calc(100% - 30px);
+  width: calc(100% - 30px);
 
-	margin-top: 10px;
-	background-color: var(--background-colorLight);
-	color: var(--fontColor);
-	border-collapse: separate;
-	border-spacing: 1px 1px;
-	table-layout: auto;
-
+  margin-top: 10px;
+  background-color: var(--background-colorLight);
+  color: var(--fontColor);
+  border-collapse: separate;
+  border-spacing: 1px 1px;
+  table-layout: auto;
 }
 
-fieldset legend{
-	position: relative;
-	top: 10px; 
-	left: 10px;
-	font-weight: bold;
+fieldset legend {
+  position: relative;
+  top: 10px;
+  left: 10px;
+  font-weight: bold;
 }
-fieldset legend::before{
-	content:'.::';
+fieldset legend::before {
+  content: ".::";
 }
-fieldset legend::after{
-	content:'::.';
+fieldset legend::after {
+  content: "::.";
 }
-
 
 /*The sticky class is added to the header with JS when it reaches its scrollposition */
 .sticky {
-	position: fixed;
-	top: 0;
-	width: 100%
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
 
 /* Addsome top padding to the page content to prevent sudden quick movement (as theheader gets a new position at the top of the page (position:fixed andtop:0) */
-.sticky+.content {
-	padding-top: 102px;
+.sticky + .content {
+  padding-top: 102px;
 }
 
 .tabs {
-	overflow: auto;
-	height: auto;
-    background: var(--background-colorClear);
-	margin: 10px;
-	padding: 10px;
+  overflow: auto;
+  height: auto;
+  background: var(--background-colorClear);
+  margin: 10px;
+  padding: 10px;
 }
 
+.bold {
+  font-weight: bold;
+}
 
 td {
-	padding-left: 5px;
-	padding-right: 5px;
-	-ms-word-break: break-word;
-	word-break: break-word;
-	-webkit-hyphens: auto;
-	-moz-hyphens: auto;
-	hyphens: auto;
-
+  padding-left: 5px;
+  padding-right: 5px;
+  -ms-word-break: break-word;
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  hyphens: auto;
 }
 
 tr {
-	border-spacing: 1px 1px;
-	transition: opacity 2s, background-color 0.5s, transform 2s, box-shadow 2s, color 0.5s;
-
-
+  border-spacing: 1px 1px;
+  transition: opacity 2s, background-color 0.5s, transform 2s, box-shadow 2s,
+    color 0.5s;
 }
 
 tr:nth-child(odd) {
-	background-color: var(--background-colorLight);
+  background-color: var(--background-colorLight);
 }
 
 tr:nth-child(even) {
-	background-color: var(--background-colorVeryLight);
+  background-color: var(--background-colorVeryLight);
 }
 
 tr a:link {
-	color: var(--fontColorLink);
-	font-weight: bold;
+  color: var(--fontColorLink);
+  font-weight: bold;
 }
 
 tr img {
-	text-decoration: none;
-	color: inherit;
+  text-decoration: none;
+  color: inherit;
 }
 
 th {
-	background-color: var(--background-colorLight);
-	color: var(--fontColor);
-	font-weight: bold;
+  background-color: var(--background-colorLight);
+  color: var(--fontColor);
+  font-weight: bold;
 }
-
 
 input,
 select {
-	
-	background: var(--background-colorLight);
-	color: var(--fontColor);
-	font-weight: bold;
-	transition: opacity 2s, background-color 2s, transform 2s, box-shadow 2s, color 2s, border 0.5s;
-	margin: 0px;
-	margin-top: 2px;
-	margin-bottom: 2px;
-	padding-left: 10px;
-	padding-right: 10px;
-	opacity: 1;
-	border-radius: initial;
-	
-	border: 1px grey solid;
+  background: var(--background-colorLight);
+  color: var(--fontColor);
+  font-weight: bold;
+  transition: opacity 2s, background-color 2s, transform 2s, box-shadow 2s,
+    color 2s, border 0.5s;
+  margin: 0px;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  padding-left: 10px;
+  padding-right: 10px;
+  opacity: 1;
+  border-radius: initial;
 
+  border: 1px grey solid;
 }
 
-.DataViewer2Search{
-display: block;
+.DataViewer2Search {
+  display: block;
 }
 
-input[type=button],
-input[type=submit] {
-	background: var(--background-colorLight);
-	font-weight: bold;
+input[type="button"],
+input[type="submit"] {
+  background: var(--background-colorLight);
+  font-weight: bold;
 }
 
 ::placeholder {
-	color: grey;
-	opacity: 1;
-	/* Firefox */
+  color: grey;
+  opacity: 1;
+  /* Firefox */
 }
 
 textarea:focus,
 input:focus,
 select:focus {
-	border: 3px grey solid;
+  border: 3px grey solid;
 }
 
 select {
-	appearance: none;
+  appearance: none;
 }
 
 .takeallplace {
-	width: 100%;
-	height: 100%;
+  width: 100%;
+  height: 100%;
 }
 
 .tooltips {
-	position: absolute;
-	display: inline-block;
-
+  position: absolute;
+  display: inline-block;
 }
 
 .tooltips .tooltipstext {
-	visibility: hidden;
-	min-width: 400px;
-	height: auto;
-	background-color: rgb(0, 0, 0);
-	border: 2px solid rgb(255, 255, 255);
-	z-index: 999;
-	color: #fff;
-	text-align: left;
-	padding: 5px;
-	position: absolute;
-	bottom: 20px;
-	left: 50%;
-	/*margin-left: calc(attr(width) / 2);*/
-	margin-left: -160px;
-	opacity: 0;
-	transition: opacity 0.5s;
-	transition-delay: 1000ms;
+  visibility: hidden;
+  min-width: 400px;
+  height: auto;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid rgb(255, 255, 255);
+  z-index: 999;
+  color: #fff;
+  text-align: left;
+  padding: 5px;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  /*margin-left: calc(attr(width) / 2);*/
+  margin-left: -160px;
+  opacity: 0;
+  transition: opacity 0.5s;
+  transition-delay: 1000ms;
 }
 
-
 .tooltips .tooltipstext::after {
-	content: "";
-	position: absolute;
-	top: 100%;
-	left: 50%;
-	/*margin-left: -10px;*/
-	
-	border-width: 10px;
-	border-style: solid;
-	border-color: rgb(0, 0, 0) transparent transparent transparent;
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  /*margin-left: -10px;*/
+
+  border-width: 10px;
+  border-style: solid;
+  border-color: rgb(0, 0, 0) transparent transparent transparent;
 }
 
 .tool:hover .tooltips .tooltipstext {
-	visibility: visible;
-	opacity: 1;
-	
+  visibility: visible;
+  opacity: 1;
 }
 
 .text_right {
-	text-orientation: sideways-right;
+  text-orientation: sideways-right;
 }
 
 .js-example-basic-multiple,
 .js-example-basic-multiple:hover {
-	color: black !important;
+  color: black !important;
 }
 
-.FieldTitle,.FieldSeparator,.FieldValue{
-    padding-top: 2x;
-    display: inline-block;
-	vertical-align: top;
-	
+.FieldTitle,
+.FieldSeparator,
+.FieldValue {
+  padding-top: 2x;
+  display: inline-block;
+  vertical-align: top;
 }
-.Field{
-    display: inline;
-}
-
-.FieldTitle{
-    width: 20%;
-    font-weight: bold;
-}
-.FieldSeparator{
-    font-weight: bold;
-}
-.FieldValue{
-    padding-right: 10px;
+.Field {
+  display: inline;
 }
 
-.trumbowyg-editor{
-	width: 100%!important;
-	/*height: 100%!important;
+.FieldTitle {
+  width: 20%;
+  font-weight: bold;
+}
+.FieldSeparator {
+  font-weight: bold;
+}
+.FieldValue {
+  padding-right: 10px;
+}
+
+.trumbowyg-editor {
+  width: 100% !important;
+  /*height: 100%!important;
 	overflow-y: auto;
 	overflow-x: auto;
 	background-color: white;*/
 }
 
-.trumbowyg-box, .trumbowyg-editor { min-height: 150px; } 
-
-input[type=datetime-local]{
-    width: 110%;
+.trumbowyg-box,
+.trumbowyg-editor {
+  min-height: 150px;
 }
 
-.SplitNotif,.SplitNotif a:link, .bad{
-	background: var(--SplitNotif);
-    color: var(--fontColorSplitNotif);
-}
-.Notif, .good{
-	background: var(--Notif);
-    
+input[type="datetime-local"] {
+  width: 110%;
 }
 
-.medium{
-    background: var(--Medium);
+.SplitNotif,
+.SplitNotif a:link,
+.bad {
+  background: var(--SplitNotif);
+  color: var(--fontColorSplitNotif);
+}
+.Notif,
+.good {
+  background: var(--Notif);
 }
 
-.bad,.good,.medium{
-    padding-left: 10px;
-    padding-right: 10px;
-    border-radius: 15px;
+.medium {
+  background: var(--Medium);
 }
 
+.bad,
+.good,
+.medium {
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 15px;
+}

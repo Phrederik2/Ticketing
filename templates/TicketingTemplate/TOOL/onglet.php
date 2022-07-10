@@ -728,6 +728,10 @@ class FieldSet extends Item
 		array_push($this->items, $item);
 	}
 
+	function get(){
+		return $this->items;
+	}
+
 	function showItems()
 	{
 		$str = "";

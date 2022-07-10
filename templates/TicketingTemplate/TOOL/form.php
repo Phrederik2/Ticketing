@@ -38,9 +38,10 @@ class Form
 		$this->where = $where;
 		$this->fullName = 'F' . sha1($name . $table . $db) . '_' . get_class($this) . '_' . $this->name;
 	}
-	
-	function commit(){
-		if($this->autoCommit==true){
+
+	function commit()
+	{
+		if ($this->autoCommit == true) {
 			$this->getQuery('COMMIT;');
 		}
 	}
@@ -74,7 +75,7 @@ class Form
 
 	function setPostExist(bool $bool)
 	{
-		$this->postExist=(bool)$bool;
+		$this->postExist = (bool)$bool;
 	}
 
 	function getInsert()
@@ -118,7 +119,7 @@ class Form
 
 	function addItem($item)
 	{
-		if(method_exists($item,'setParent')){
+		if (method_exists($item, 'setParent')) {
 			$item->setParent($this);
 		}
 		$this->item[$item->getName()] = $item;
@@ -130,10 +131,10 @@ class Form
 
 	function ReplaceItem($label, $item)
 	{
-		if(method_exists($item,'setParent')){
+		if (method_exists($item, 'setParent')) {
 			$item->setParent($this);
 		}
-		
+
 		$this->item[$item->getName()] = $item;
 		//$this->itemItin[]=$item;
 
@@ -142,6 +143,10 @@ class Form
 		}
 	}
 
+	/**
+	 * @param mixed $name 
+	 * @return FormItem|null
+	 */
 	function getItem($name = null)
 	{
 		if ($name == null) {
@@ -159,10 +164,10 @@ class Form
 
 	function setItem($name, $newItem)
 	{
-		if(method_exists($newItem,'setParent')){
+		if (method_exists($newItem, 'setParent')) {
 			$newItem->setParent($this);
 		}
-		
+
 		foreach ($this->item as $key => $item) {
 			if (strtolower($key) == strtolower($name)) {
 				$this->item[$key] = $newItem;
@@ -348,8 +353,6 @@ class Form
 		}
 
 		$this->addItem(new Submit('Submit'));
-
-		
 	}
 
 	function select()
@@ -425,8 +428,8 @@ class Form
 		$value = '';
 
 		foreach ($this->item as $item) {
-			$this->debug('DebugInsert', $item->getTableChamp(), 'getItemIsUpdatable['.$item->getItemIsUpdatable().'], getUpdatable['.$item->getUpdatable().'], getForceValue['.$item->getForceValue().'], getTableChamp['.$item->getTableChamp().']');
-			if (($item->getItemIsUpdatable() and $item->getUpdatable()) or $item->getForceValue()!=null) {
+			$this->debug('DebugInsert', $item->getTableChamp(), 'getItemIsUpdatable[' . $item->getItemIsUpdatable() . '], getUpdatable[' . $item->getUpdatable() . '], getForceValue[' . $item->getForceValue() . '], getTableChamp[' . $item->getTableChamp() . ']');
+			if (($item->getItemIsUpdatable() and $item->getUpdatable()) or $item->getForceValue() != null) {
 				if ($item->getTableChamp() != '') {
 					if ($column != '') $column .= ',';
 					$column .= "`" . $item->getTableChamp() . "`";
@@ -440,9 +443,9 @@ class Form
 		$table = "`{$this->table}`";
 		if ($this->db != '');
 		$table = "`{$this->db}`.`{$this->table}`";
-		$commit="";
-		if($this->autoCommit===true){
-			$commit='COMMIT;';
+		$commit = "";
+		if ($this->autoCommit === true) {
+			$commit = 'COMMIT;';
 		}
 		$query = "INSERT INTO " . $this->showTable() . " ({$column}) VALUES ({$value}); $commit";
 		$this->debug('REQUETE', 'INSERT', $query);
@@ -463,7 +466,7 @@ class Form
 
 			$this->debug('UpdateValueOldNew', $item->getName(), $item->getSelectValue() . ' - ' . $item->getValue());
 
-			if (($item->getForceValue()!=null) or ($item->getItemIsUpdatable() and $item->getUpdatable() and $item->getSelectValue() !== $item->getValue())) {
+			if (($item->getForceValue() != null) or ($item->getItemIsUpdatable() and $item->getUpdatable() and $item->getSelectValue() !== $item->getValue())) {
 
 				if ($item->getTableChamp() != null) {
 					if ($set != '') $set .= ', ';
@@ -476,9 +479,9 @@ class Form
 			}
 		}
 
-		$commit="";
-		if($this->autoCommit===true){
-			$commit='COMMIT;';
+		$commit = "";
+		if ($this->autoCommit === true) {
+			$commit = 'COMMIT;';
 		}
 
 		$query = "UPDATE " . $this->showTable() . " SET {$set} WHERE {$this->where}; $commit";
@@ -487,7 +490,7 @@ class Form
 
 			$this->isUpdate = true;
 			$this->update = true;
-			
+
 			$this->debug('ISUPDATE', 'TRUE', $this->getIsUpdate());
 			$data = $this->getQuery($query);
 			//$this->commit();
@@ -621,7 +624,7 @@ class Form
 	function showStart()
 	{
 		return '
-		<form action="'.Tool::url().'" method="POST" ' . $this->showAction() . ' name="' . $this->fullName . '" id="' . $this->fullName . '" enctype="multipart/form-data" >';
+		<form action="' . Tool::url() . '" method="POST" ' . $this->showAction() . ' name="' . $this->fullName . '" id="' . $this->fullName . '" enctype="multipart/form-data" >';
 	}
 
 	function getIsInsert()
@@ -676,55 +679,50 @@ class Form
 		return $str;
 	}
 
-	function init(bool $force=false){
+	function init(bool $force = false)
+	{
 
-		if($force===true){
-			$this->displayElement=array();
+		if ($force === true) {
+			$this->displayElement = array();
 		}
-		
-		if(count($this->displayElement)==0){
+
+		if (count($this->displayElement) == 0) {
 			//$this->newRecord();
 			$this->displayElement['showStart'] = new Item($this->showStart());
 
 			foreach ($this->getItem() as $item) {
-				
+
 				$this->displayElement[$item->getName()] = new Field($item->getName(), $item);
-					
-				
 			}
 
 			$this->displayElement['showEnd'] = new Item($this->showEnd());
-
 		}
-		
 	}
 
-	function getElement($key){
-		if(isset($this->displayElement[strtolower($key)])){
+	function getElement($key)
+	{
+		if (isset($this->displayElement[strtolower($key)])) {
 			return $this->displayElement[strtolower($key)];
-		}
-		else{
+		} else {
 			return null;
 		}
 	}
 
 	function toString()
 	{
-		if(count($this->displayElement)==0){
+		if (count($this->displayElement) == 0) {
 			$this->init();
 		}
 
 		$str = '';
 
-		foreach ($this->displayElement as $k=>$field) {
-				$item = $field->getValueBrut();
-			if (is_object($item) and $item->getEnable() == true and $item->getDisplay() === true) {
-				
+		foreach ($this->displayElement as $k => $field) {
+			$item = $field->getValueBrut();
+			if (is_object($item)  and $item->getDisplay() === true) {
+
 				$str .= $field->toString();
-					
-			}
-			else if (is_string($item)){
-				
+			} else if (is_string($item)) {
+
 				$str .= $field->toString();
 			}
 		}
@@ -785,32 +783,32 @@ abstract class FormItem
 				$this->getParent()->setPostExist(true);
 				$_SESSION[$this->getFullName()] = $_POST[$this->getFullName()];
 			}
-		}
-		else if ($this->getParent() != null and $this->getParent()->getSaveValueInSession() == true and isset($_SESSION[$this->getFullName()]) == true) {
+		} else if ($this->getParent() != null and $this->getParent()->getSaveValueInSession() == true and isset($_SESSION[$this->getFullName()]) == true) {
 			$this->setDefaultValue($_SESSION[$this->getFullName()]);
 			$this->setValue($_SESSION[$this->getFullName()]);
 		}
 
-		if($this->multiSelectValue===true){
-			if($this->getParent()!=null and $this->getParent()->getPostExist()===true and $this->getPostExist()===false){
-			
+		if ($this->multiSelectValue === true) {
+			if ($this->getParent() != null and $this->getParent()->getPostExist() === true and $this->getPostExist() === false) {
+
 				$this->forceValue([]);
 				$_SESSION[$this->getFullName()] = [];
-				
-			} 
+			}
 		}
 	}
 
-	function setDisplay(bool $bool){
-		$this->display=$bool;
+	function setDisplay(bool $bool)
+	{
+		$this->display = $bool;
 	}
-	function getDisplay(){
+	function getDisplay()
+	{
 		return $this->display;
 	}
 
 	/**
 	 * Get the value of placeHolder
-	 */ 
+	 */
 	public function getPlaceHolder()
 	{
 		return $this->placeHolder;
@@ -820,14 +818,14 @@ abstract class FormItem
 	 * Set the value of placeHolder
 	 *
 	 * @return  self
-	 */ 
+	 */
 	public function setPlaceHolder($placeHolder)
 	{
 		$this->placeHolder = $placeHolder;
 
 		return $this;
 	}
-	
+
 
 	function setAutoCompletion($value)
 	{
@@ -950,7 +948,7 @@ abstract class FormItem
 
 	function cleanClass()
 	{
-		$this->classhtml=array();
+		$this->classhtml = array();
 	}
 
 	function addId($value)
@@ -982,6 +980,7 @@ abstract class FormItem
 	function setEnable($value)
 	{
 		$this->enable = $value;
+		$this->setDisplay($value);
 	}
 	function getEnable()
 	{
@@ -1086,30 +1085,30 @@ abstract class FormItem
 	function getValue()
 	{
 
-		if(is_array($this->getValueOrDefautlValue())){
-			foreach($this->getValueOrDefautlValue() as &$l){
-				$l = trim($l);
+		if (is_array($this->getValueOrDefautlValue())) {
+			foreach ($this->getValueOrDefautlValue() as &$l) {
+				$l = Tool::custom_trim($l);
 			}
 			unset($l);
 			return $this->getValueOrDefautlValue();
 		}
-		
-		return trim($this->getValueOrDefautlValue());
+
+		return Tool::custom_trim($this->getValueOrDefautlValue());
 	}
 	function getValueText()
 	{
 
-		if(is_array($this->getValueOrDefautlValue())){
-			$tmp='';
-			foreach($this->getValueOrDefautlValue() as &$l){
-				if($tmp!='')$tmp.=', ';
-				$tmp.= htmlentities(stripslashes(trim($l())));
+		if (is_array($this->getValueOrDefautlValue())) {
+			$tmp = '';
+			foreach ($this->getValueOrDefautlValue() as &$l) {
+				if ($tmp != '') $tmp .= ', ';
+				$tmp .= htmlentities(stripslashes(Tool::custom_trim($l())));
 			}
 			unset($l);
 			return $tmp;
 		}
-		
-		return htmlentities(stripslashes(trim($this->getValueOrDefautlValue())));
+
+		return htmlentities(stripslashes(Tool::custom_trim($this->getValueOrDefautlValue())));
 	}
 
 	function getParentFullName()
@@ -1127,13 +1126,17 @@ abstract class FormItem
 	{
 		$this->setforceValue = true;
 		$this->forceValue = $value;
-		$_SESSION[$this->getFullName()]=$value;
+		$_SESSION[$this->getFullName()] = $value;
+	}
+
+	function cleanSession()
+	{
+		unset($_SESSION[$this->getFullName()]);
 	}
 
 	function getForceValue()
 	{
-		return $this->forceValue ;
-	
+		return $this->forceValue;
 	}
 
 
@@ -1186,7 +1189,6 @@ abstract class FormItem
 		}else{
 			return $this->placeHolder;
 		}*/
-		
 	}
 
 	function showEnable()
@@ -1243,25 +1245,27 @@ class Number extends FormItem
 
 	static protected $staticclasshtml = array();
 	static protected $staticidhtml = array();
-	private $min=null;
-	private $max=null;
+	private $min = null;
+	private $max = null;
 
-	function setMinMax($min,$max){
+	function setMinMax($min, $max)
+	{
 		$this->min = $min;
 		$this->max = $max;
 	}
 
-	function showMinMax(){
-		if($this->min!==null and $this->max!==null){
-			return 'min="'.$this->min.'" max="'.$this->max.'"';
+	function showMinMax()
+	{
+		if ($this->min !== null and $this->max !== null) {
+			return 'min="' . $this->min . '" max="' . $this->max . '"';
 		}
 	}
-	
+
 
 	function show()
 	{
 		return $this->showSQLBuilder() . '
-			<input type="number" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="' . $this->showClass() . '" id="' . $this->showId() . '" name="' . $this->fullname . '" placeholder="' . $this->showPlaceHolder() . '" value="' . $this->getValueText() . '" ' . $this->showEnable() . ' '.$this->showMinMax().' >';
+			<input type="number" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="' . $this->showClass() . '" id="' . $this->showId() . '" name="' . $this->fullname . '" placeholder="' . $this->showPlaceHolder() . '" value="' . $this->getValueText() . '" ' . $this->showEnable() . ' ' . $this->showMinMax() . ' >';
 	}
 }
 
@@ -1270,20 +1274,21 @@ class DateTimeForm extends FormItem
 
 	static protected $staticclasshtml = array();
 	static protected $staticidhtml = array();
-	
-	
-	function getValue(){
+
+
+	function getValue()
+	{
 		$value = parent::getValue();
-		$value = str_replace('T', ' ',$value).':00';
-		if(strlen($value)==19)return $value;
+		$value = str_replace('T', ' ', $value) . ':00';
+		if (strlen($value) == 19) return $value;
 		return '';
 	}
 
 	function show()
 	{
-		$value = str_replace(' ','T',parent::getValue());
-		if(substr($value,-3)==':00'){
-			$value = substr($value,0,strlen($value)-3);
+		$value = str_replace(' ', 'T', parent::getValue());
+		if (substr($value, -3) == ':00') {
+			$value = substr($value, 0, strlen($value) - 3);
 		}
 		return $this->showSQLBuilder() . '
 			<input type="datetime-local" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="' . $this->showClass() . '" id="' . $this->showId() . '" name="' . $this->fullname . '" placeholder="' . $this->showPlaceHolder() . '" value="' . $value . '" ' . $this->showEnable() . ' >';
@@ -1307,7 +1312,7 @@ class Hidden extends FormItem
 
 	static protected $staticclasshtml = array();
 	static protected $staticidhtml = array();
-	protected $display=false;
+	protected $display = false;
 
 	function show()
 	{
@@ -1362,8 +1367,8 @@ class TextareaEditor extends FormItem
 			<textarea hidden  edit="true" for="' . $this->getParentFullName() . '" ' . $this->showHtmlOption() . ' class="' . $this->showClass() . '" id="' . $this->fullname . '" cols="' . $this->col . '" rows="' . $this->row . '" placeholder="' . $this->showPlaceHolder() . '" name="' . $this->fullname . '" ' . $this->showEnable() . '>' . $this->getValue() . '</textarea>';
 		$t =	"<script AJAX_KEY=\"" . (bool)self::getOption('AJAX_KEY') . "\"> ";
 
-		
-			$t = "$('#" . $this->fullname . "').trumbowyg(
+
+		$t = "$('#" . $this->fullname . "').trumbowyg(
 				{
 					
 					semantic: false,
@@ -1391,7 +1396,7 @@ class TextareaEditor extends FormItem
 				
 				}
 			   );  </script>";
-		
+
 
 
 		return $str;
@@ -1577,11 +1582,11 @@ class Button extends FormItem
 	static protected $staticidhtml = array();
 	protected $itemIsUpdatable = false;
 
-	function showValue(){
-		if($this->getValue()!=''){
+	function showValue()
+	{
+		if ($this->getValue() != '') {
 			return $this->getValue();
-		}
-		else{
+		} else {
 			return $this->getName();
 		}
 	}
@@ -1734,23 +1739,23 @@ class SelectList extends FormItem
 	}
 }
 
-class MultiSelect extends SelectList{
+class MultiSelect extends SelectList
+{
 
-	protected $multiSelectValue=true;
+	protected $multiSelectValue = true;
 
 	function __construct($name, $tablechamp = null, $dataset = null, $fieldLabel = null, $fieldValue = null)
 	{
 		parent::__construct($name, $tablechamp);
 		$this->addAllSelectOption($dataset, $fieldLabel, $fieldValue);
-		
 	}
 	function showValue()
 	{
-		
+
 		$str = '';
 		foreach ($this->listValue as $label => $value) {
 			$checked = '';
-			
+
 			if (is_array($this->getValueOrDefautlValue()) and in_array($value, $this->getValueOrDefautlValue())) $checked = ' selected';
 			$str .= '<option value="' . $value . '" ' . $checked . '>' . $label . '</option>';
 		}
@@ -1791,7 +1796,7 @@ class SQLBuilder
 	function constructData()
 	{
 		//$data = DbCo::getListOfJoin();
-        $data=array();
+		$data = array();
 		$result = array();
 		foreach ($data as $line) {
 			$table = $line['nameOfTable'];
@@ -1801,7 +1806,7 @@ class SQLBuilder
 
 			if ($subQuery == '') {
 				//$d = DbCo::showFull($db, $table);
-                $d=array();
+				$d = array();
 				foreach ($d as $l) {
 					$champ = $l['Field'];
 					$result[] = $alias . '.' . $champ;
@@ -1996,7 +2001,7 @@ class FullForm
 	{
 		$this->listJoin[] = array('db' => $db, 'table' => $table, 'alias' => $alias, 'where' => $where);
 	}
-	
+
 
 	function showAction()
 	{
@@ -2327,7 +2332,7 @@ class DataViewer
 	}
 	function setPostExist(bool $bool)
 	{
-		return $this->postExist=(bool)$bool;
+		return $this->postExist = (bool)$bool;
 	}
 
 	function getDescribe()
@@ -2762,7 +2767,7 @@ class DataViewer
 						$sha = ':A' . 'operator' . '_' . $i . $field . rand();
 						if ($str != "") $str .= $op;
 						$str .= "`" . $field . "` $operator $sha";
-						$sqlPrepare[$sha] = trim($item);
+						$sqlPrepare[$sha] = Tool::custom_trim($item);
 						$found = true;
 					}
 				}
@@ -2781,7 +2786,7 @@ class DataViewer
 						$sha = ':A' . '_IN' . $i . '_' . $j . '_' . $field . rand();
 						if ($strval != "") $strval .= ', ';
 						$strval .= $sha;
-						$sqlPrepare[$sha] = trim($val, " \t\n\r\0\x0B'");
+						$sqlPrepare[$sha] = Tool::custom_trim($val, " \t\n\r\0\x0B'");
 					}
 
 					if ($str != "") $str .= $op;
@@ -2796,7 +2801,7 @@ class DataViewer
 					$sha = ':A' . '_DEFAULT_' . $field . rand();
 					if ($str != "") $str .= $op;
 					$str .= "`" . $field . "` like $sha";
-					$sqlPrepare[$sha] = '%' . trim($value) . '%';
+					$sqlPrepare[$sha] = '%' . Tool::custom_trim($value) . '%';
 				}
 			}
 		}
@@ -2848,7 +2853,7 @@ class DataViewer
 						$sha = ':A' . '_IN' . $i . '_' . $field . rand();
 						if ($strval != "") $strval .= ', ';
 						$strval .= $sha;
-						$sqlPrepare[$sha] = trim($v, " \t\n\r\0\x0B'");
+						$sqlPrepare[$sha] = Tool::custom_trim($v, " \t\n\r\0\x0B'");
 					}
 
 					$found = true;
@@ -3055,68 +3060,74 @@ class DataViewer2
 	private $init = false;
 	private $init2 = false;
 	private $displayForm = true;
-	private $itemDisplay =null;
-	private $debug =false;
-	
-	
-	function __construct(String $title, SQL $sql, $editMode=true)
+	private $itemDisplay = null;
+	private $debug = false;
+
+
+	function __construct(String $title, SQL $sql, $editMode = true)
 	{
 		$this->title = $title;
-		$this->labelcommandeOption = get_class($this).'_'.$title.'_CommandeOption';
-		
-		if(!isset($_SESSION[$this->labelcommandeOption])){
-			$_SESSION[$this->labelcommandeOption]='';
+		$this->labelcommandeOption = get_class($this) . '_' . $title . '_CommandeOption';
+
+		if (!isset($_SESSION[$this->labelcommandeOption])) {
+			$_SESSION[$this->labelcommandeOption] = '';
 		}
 
 		$this->sql_brut = $sql;
-		$this->editMode=$editMode;
-		$this->recordMode=$editMode;
+		$this->editMode = $editMode;
+		$this->recordMode = $editMode;
 	}
 
-	function setDebug(bool $bool){
-		$this->debug=$bool;
-	}
-	
-	function setLabelEditMode($label){
-		$this->labelEditMode=$label;
+	function setDebug(bool $bool)
+	{
+		$this->debug = $bool;
 	}
 
-	function setPagination($recordByPage){
-		$this->pagination=$recordByPage;
+	function setLabelEditMode($label)
+	{
+		$this->labelEditMode = $label;
 	}
 
-	function addMultiSelect($alias,$maxItem=null,$displayCount=true){
-		if($maxItem===null){
+	function setPagination($recordByPage)
+	{
+		$this->pagination = $recordByPage;
+	}
+
+	function addMultiSelect($alias, $maxItem = null, $displayCount = true)
+	{
+		if ($maxItem === null) {
 			$maxItem = $this->maxMultiSelectDefault;
 		}
-		$this->listMultiSelect[$alias]=['maxItem'=>$maxItem,'displayCount'=>$displayCount];
+		$this->listMultiSelect[$alias] = ['maxItem' => $maxItem, 'displayCount' => $displayCount];
 	}
 
-	function setRecordMode(bool $bool){
-		$this->recordMode=$bool;
+	function setRecordMode(bool $bool)
+	{
+		$this->recordMode = $bool;
 	}
 
-	function setEditMode(bool $bool){
-		$this->editMode=$bool;
+	function setEditMode(bool $bool)
+	{
+		$this->editMode = $bool;
 	}
 
 	function setCount()
 	{
 		$list = $this->sql_brut->getValidField();
 		$sql2 = clone $this->sql_brut;
-		
+
 		$sql2->cleanFields();
 		$sql2->cleanPrimaryField();
 
 		$sql2->addFunctionForced('count(*)', 'count');
 
-		foreach($list as $f){
-			
-			if($f['type']==='function'){
+		foreach ($list as $f) {
+
+			if ($f['type'] === 'function') {
 				$sql2->addFunctionForced($f['field'], $f['alias']);
 			}
 		}
-		
+
 		$count = DbCo::getQuery($sql2->toString(), $sql2->getArgs());
 		$c = 0;
 		if (isset($count[0]['count'])) {
@@ -3126,40 +3137,50 @@ class DataViewer2
 			$c = count($count);
 		}
 
-		$this->count=$c;
+		$this->count = $c;
 	}
 
-	function getCount(){
+	function getCount()
+	{
 		return $this->count;
 	}
 
-	function getCommandeOption(){
+	function getCommandeOption()
+	{
 		return $_SESSION[$this->labelcommandeOption];
 	}
-	function setCommandeOption($commande){
-		$_SESSION[$this->labelcommandeOption]=$commande;
+	function setCommandeOption($commande)
+	{
+		$_SESSION[$this->labelcommandeOption] = $commande;
 	}
 
-	static function setEvent($target,$action, $event='click'){
-		
-		
-		$target->addOption('Form-Action-'.$event, true);
+	static function setEvent($target, $action, $event = 'click')
+	{
+
+
+		$target->addOption('Form-Action-' . $event, true);
 		$target->addOption('Action', $action);
 		//$target->addOption('ActionEvent', $event);
 
-		$target->addOption('LinkOption',null);
+		$target->addOption('LinkOption', null);
 		$target->addOption('LinkForm', null);
 
-		if($target->getParent()!=null){
+		if ($target->getParent() != null) {
 			$form = $target->getParent();
-			if($form->getItem('Option')!=null){
-				$target->addOption('LinkOption',$form->getItem('Option')->getFullName());
+			if ($form->getItem('Option') != null) {
+				$target->addOption('LinkOption', $form->getItem('Option')->getFullName());
 			}
-			
+
 			$target->addOption('LinkForm', $form->getFullName());
 		}
-		
+	}
 
+	/** 
+	 * renvoi le formulaire (Form) qui est chargé de la gestion des filtre
+	 * @return Form|null  */
+	function getFormFilter()
+	{
+		return $this->formFilter;
 	}
 
 
@@ -3173,8 +3194,8 @@ class DataViewer2
 	{
 		// création du formulaire
 		$sha = sha1(serialize($this->sql_brut->getPrimaryTable()));
-		$this->formFilter = new Form(get_class($this).'_'.$this->title.'_'.$sha);
-
+		$this->formFilter = new Form(get_class($this) . '_' . $this->title . '_' . $sha);
+		
 		// on sauve les valeurs dans la session 
 		$this->formFilter->setSaveValueInSession(true);
 
@@ -3185,7 +3206,7 @@ class DataViewer2
 		// création du champ PAGE pour la pagination
 		$this->formFilter->addItem(new Number('_Page'));
 		$this->formFilter->getItem('_Page')->setDefaultValue(1);
-		self::setEvent($this->formFilter->getItem('_Page'),'','change');
+		self::setEvent($this->formFilter->getItem('_Page'), '', 'change');
 		//$this->formFilter->getItem('_Page')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();'); 
 
 		$this->formFilter->getItem('_Page')->setAutoCompletion(false);
@@ -3194,14 +3215,14 @@ class DataViewer2
 		// création du champ Pagination pour la pagination
 		$this->formFilter->addItem(new Number('Pagination'));
 		$this->formFilter->getItem('Pagination')->setDefaultValue($this->pagination);
-		self::setEvent($this->formFilter->getItem('Pagination'),'','change');
+		self::setEvent($this->formFilter->getItem('Pagination'), '', 'change');
 		//$this->formFilter->getItem('Pagination')->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
 		$this->formFilter->getItem('Pagination')->setAutoCompletion(false);
 		$this->formFilter->getItem('Pagination')->addClass('minimumSize');
 
 		//Création d'un champ TEXT pour effectuer une recherche global
 		$this->formFilter->addItem(new Text('Global_Search'));
-		$this->formFilter->getItem('Global_Search')->setPlaceHolder('Global Search...');		
+		$this->formFilter->getItem('Global_Search')->setPlaceHolder('Global Search...');
 		$this->formFilter->getItem('Global_Search')->setAutoCompletion(false);
 
 		//Création du bouton 'Search'
@@ -3212,25 +3233,25 @@ class DataViewer2
 		$this->formFilter->addItem(new Button('Reinitialize'));
 		$this->formFilter->getItem('Reinitialize')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'RESET' dans l'input Option et de valider le formulaire
-		self::setEvent($this->formFilter->getItem('Reinitialize'),'RESET');
+		self::setEvent($this->formFilter->getItem('Reinitialize'), 'RESET');
 		/*$this->formFilter->getItem('Reinitialize')->addOption('Form-Action', 'RESET');
 		$this->formFilter->getItem('Reinitialize')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 		$this->formFilter->getItem('Reinitialize')->addOption('LinkForm', $this->formFilter->getFullName());*/
-		
-		
+
+
 		// création du bouton New Record
 		$this->formFilter->addItem(new Button('New Record'));
 		$this->formFilter->getItem('New Record')->addClass('minimumSize');
 		// ajoute un evenement OnCLick pour envoyer la commande 'NEWRECORD' dans l'input Option et de valider le formulaire
-		self::setEvent($this->formFilter->getItem('New Record'),'NEWRECORD');
+		self::setEvent($this->formFilter->getItem('New Record'), 'NEWRECORD');
 		/*$this->formFilter->getItem('New Record')->addOption('Form-Action', 'NEWRECORD');
 		$this->formFilter->getItem('New Record')->addOption('LinkOption', $this->formFilter->getItem('Option')->getFullName());
 		$this->formFilter->getItem('New Record')->addOption('LinkForm', $this->formFilter->getFullName());*/
-		
+
 
 		// récuperer la valeur de Option dans le POST pour executer les actions requises
 		$option = '';
-		if(isset($_POST[$this->formFilter->getItem('Option')->getFullName()])){
+		if (isset($_POST[$this->formFilter->getItem('Option')->getFullName()])) {
 			$this->commandeOption = $_POST[$this->formFilter->getItem('Option')->getFullName()];
 			$this->setCommandeOption($this->commandeOption);
 		}
@@ -3238,89 +3259,85 @@ class DataViewer2
 
 		// récuperer les champ dans la requete SQL 
 		$fields = $this->sql_brut->getValidField();
-		$cleanOrderBy=false;
+		$cleanOrderBy = false;
 
 		// Ajoute un TEXT pour chaque champ
 		// Ajout un ENUM SORT pour chaque champ
 		foreach ($fields as $l) {
 			$alias = $l['alias'];
-			$aliasSort = $l['alias'].'_SORT';
+			$aliasSort = $l['alias'] . '_SORT';
 			$type = $l['type'];
-			if(isset($this->listMultiSelect[$alias])){
+			if (isset($this->listMultiSelect[$alias])) {
 				$tmp = $this->listMultiSelect[$alias];
-			
-				$this->addItemMultiSelectInForm($alias,$tmp['maxItem'],$tmp['displayCount']);
+
+				$this->addItemMultiSelectInForm($alias, $tmp['maxItem'], $tmp['displayCount']);
 				//$this->formFilter->getItem($alias)->addClass('width100');
-				
-			}
-			else{
+
+			} else {
 				$this->formFilter->addItem(new Text($alias));
 				//$this->formFilter->addItem(new Item('<br>'));
 				$this->formFilter->getItem($alias)->addClass('width100');
 				$this->formFilter->getItem($alias)->addClass('DataViewer2Search');
 				//$this->formFilter->getItem($alias)->addClass('whereinput');
 				//$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-				self::setEvent($this->formFilter->getItem($alias),'','change');
+				self::setEvent($this->formFilter->getItem($alias), '', 'change');
 				$this->formFilter->getItem($alias)->setAutoCompletion(false);
 			}
-			
-			
-			$this->formFilter->addItem(new Enum($aliasSort,null,['','ASC','DESC']));
+
+
+			$this->formFilter->addItem(new Enum($aliasSort, null, ['', 'ASC', 'DESC']));
 			//$this->formFilter->addItem(new Item('<br>'));
 			$this->formFilter->getItem($aliasSort)->addClass('width100');
 			$this->formFilter->getItem($aliasSort)->addClass('DataViewer2Search');
 			//$this->formFilter->getItem($aliasSort)->addClass('minimumSize');
-			$this->formFilter->getItem($aliasSort)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-			self::setEvent($this->formFilter->getItem($aliasSort),'','change');
+			$this->formFilter->getItem($aliasSort)->addOption('onchange', 'document.' . $this->formFilter->getFullName() . '.submit();');
+			self::setEvent($this->formFilter->getItem($aliasSort), '', 'change');
 			// si commande = RESET, remet les valeurs à blanc
-			if($option==='RESET'){
+			if ($option === 'RESET') {
 				$this->formFilter->getItem($alias)->forceValue('');
 				$this->formFilter->getItem($aliasSort)->forceValue('');
 			}
-			
-			
+
+
 			// apres la création du champ les valeurs des POST/SESSION sont récuperée automatiquement
 			// on peux donc traiter directement les valeurs pour manipuler WHERE/HAVING dans la requete d'origine
 			$value = $this->formFilter->getItem($alias)->getValue();
 			$valueSort = $this->formFilter->getItem($aliasSort)->getValue();
-			if(($value!='' and !is_array($value)) or (is_array($value) and count($value))){
+			if (($value != '' and !is_array($value)) or (is_array($value) and count($value))) {
 				switch ($type) {
 					case 'field':
-						$tmpValue=null;
-						if(get_class($this->formFilter->getItem($alias))==='MultiSelect'){
-							
-							$tmpValue = $this->getOperatorMultiSelect($l['tableAlias'] . '.' . $l['field'],$value);
-							
+						$tmpValue = null;
+						if (get_class($this->formFilter->getItem($alias)) === 'MultiSelect') {
+
+							$tmpValue = $this->getOperatorMultiSelect($l['tableAlias'] . '.' . $l['field'], $value);
+						} else {
+							$tmpValue = $this->getOperator($l['tableAlias'] . '.' . $l['field'], $value);
 						}
-						else{
-							$tmpValue = $this->getOperator($l['tableAlias'] . '.' . $l['field'],$value);
-						}
-						
-						if($tmpValue!==null){
+
+						if ($tmpValue !== null) {
 							$operator = $tmpValue['operator'];
 							$listValue = $tmpValue['values'];
 							$this->sql_brut->addWhere($operator, $listValue);
 						}
-						
+
 						break;
 					case 'function':
-						$tmpValue=null;
-						if(get_class($this->formFilter->getItem($alias))==='MultiSelect'){
-							if(is_array($value) and count($value)>0){
-								$tmpValue = $this->getOperatorMultiSelect($alias,$value);
+						$tmpValue = null;
+						if (get_class($this->formFilter->getItem($alias)) === 'MultiSelect') {
+							if (is_array($value) and count($value) > 0) {
+								$tmpValue = $this->getOperatorMultiSelect($alias, $value);
 							}
+						} else {
+							$tmpValue = $this->getOperator('`' . $alias . '`', $value);
 						}
-						else{
-							$tmpValue = $this->getOperator('`'.$alias.'`',$value);
-						}
-						if($tmpValue!==null){
+						if ($tmpValue !== null) {
 							$operator = $tmpValue['operator'];
 							$listValue = $tmpValue['values'];
 							$this->sql_brut->addHaving($operator, $listValue);
 						}
-						
+
 						break;
-	
+
 					default:
 						# code...
 						break;
@@ -3328,97 +3345,93 @@ class DataViewer2
 			}
 
 			// traitement identique au WHERE/HAVING mais pour la clause ORDER BY
-			if($valueSort!=''){
-				if($cleanOrderBy==false){
+			if ($valueSort != '') {
+				if ($cleanOrderBy == false) {
 					$this->sql_brut->cleanOrderBy();
-					$cleanOrderBy=true;
+					$cleanOrderBy = true;
 				}
 				switch ($type) {
 					case 'field':
-						
-						$this->sql_brut->addOrderBy($l['tableAlias'] . '.' . $l['field'] , $valueSort);
+
+						$this->sql_brut->addOrderBy($l['tableAlias'] . '.' . $l['field'], $valueSort);
 						break;
 					case 'function':
-						$this->sql_brut->addOrderBy('`'.$l['alias'].'`' , $valueSort);
+						$this->sql_brut->addOrderBy('`' . $l['alias'] . '`', $valueSort);
 						break;
-	
+
 					default:
 						# code...
 						break;
 				}
-			}	
+			}
 		}
 
 		// taitement de la recherche Global
 		$globalSearch = $this->formFilter->getItem('Global_Search')->getValue();
-		if($globalSearch!=''){
-			$opWhere='';
-			$listValueWhere=array();
-			$opHaving='';
-			$listValueHaving=array();
-			
+		if ($globalSearch != '') {
+			$opWhere = '';
+			$listValueWhere = array();
+			$opHaving = '';
+			$listValueHaving = array();
+
 			foreach ($fields as $l) {
 				$alias = $l['alias'];
-				$aliasSort = $l['alias'].'_SORT';
+				$aliasSort = $l['alias'] . '_SORT';
 				$type = $l['type'];
 				switch ($type) {
 					case 'field':
-						if($opWhere != ''){
+						if ($opWhere != '') {
 							$opWhere .= ' OR ';
 						}
-						$opWhere .= $l['tableAlias'] . '.' . $l['field'] .' like ?';
-						$listValueWhere[]='%'.trim($globalSearch).'%';
-						
+						$opWhere .= $l['tableAlias'] . '.' . $l['field'] . ' like ?';
+						$listValueWhere[] = '%' . Tool::custom_trim($globalSearch) . '%';
+
 						break;
 					case 'function':
-						if($opHaving != ''){
+						if ($opHaving != '') {
 							$opHaving .= ' OR ';
 						}
 						$opHaving .= $l['alias'] . ' like ?';
-						$listValueHaving[]='%'.trim($globalSearch).'%';
-						
+						$listValueHaving[] = '%' . Tool::custom_trim($globalSearch) . '%';
+
 						break;
-	
+
 					default:
 						# code...
 						break;
 				}
-	
 			}
-			if($opWhere!=''){
+			if ($opWhere != '') {
 				$this->sql_brut->addWhere($opWhere, $listValueWhere);
 			}
-			if($opHaving!=''){
+			if ($opHaving != '') {
 				//$this->sql_brut->addHaving($opHaving, $listValueHaving);
-			} 
-		
+			}
 		}
-		
+
 
 		// Si commande reset, ne pas oublier de formater les valeurs par defaut des autres element de formulaire
-		if($option==='RESET'){
+		if ($option === 'RESET') {
 			$this->formFilter->getItem('_Page')->forceValue(1);
 			$this->formFilter->getItem('Pagination')->forceValue($this->pagination);
 			$this->formFilter->getItem('Global_Search')->forceValue('');
 			$this->formFilter->getItem('Global_Search')->setDefaultValue(false);
-			$this->commandeOption='';
+			$this->commandeOption = '';
 			$this->setCommandeOption('');
 		}
-		
-
-
 	}
 
-	function addItemMultiSelectInForm($alias,$max,$displayCount){
+	function addItemMultiSelectInForm($alias, $max, $displayCount)
+	{
 		// chercher la table d'origine
-		$tableAlias=null;
-		$field=null;
-		
-		foreach($this->sql_brut->getValidField() as $f){
-			if($alias===$f['alias'] and $f['type']==='field'){
+		$tableAlias = null;
+		$field = null;
+
+		foreach ($this->sql_brut->getValidField() as $f) {
+			if ($alias === $f['alias'] and $f['type'] === 'field') {
 				$tableAlias = $f['tableAlias'];
 				$field = $f['field'];
-				
+
 				break;
 			}
 		}
@@ -3433,259 +3446,257 @@ class DataViewer2
 		$sql2->cleanGroupBy();
 		$sql2->cleanHaving();
 		$sql2->addGroupBy($alias);
-		$sql2->addField($tableAlias,$field,$alias);
-		$sql2->addFunction('count(*)','Count');
+		$sql2->addField($tableAlias, $field, $alias);
+		$sql2->addFunction('count(*)', 'Count');
 
 		$list = $this->sql_brut->getValidField();
-		foreach($list as $f){		
-			if($f['type']==='function'){
+		foreach ($list as $f) {
+			if ($f['type'] === 'function') {
 				$sql2->addFunctionForced($f['field'], $f['alias']);
 			}
 		}
 
-		$sql2->addGroupBy($tableAlias.'.'.$field);
-		$sql2->addOrderBy($tableAlias.'.'.$field,'ASC');
-		$list = DbCo::getQuery($sql2->toString(),$sql2->getArgs());
-		
-		// crée multiselect dans le formulaire
-		if(count($list)<=$max){
-			$this->formFilter->addItem(new MultiSelect($alias,null));
-			if($displayCount){
-				foreach($list as $l){
-					$a=$l[$alias];
-					if($l[$alias]==''){
-						$a = '[Empty]';
-					}
-					$this->formFilter->getItem($alias)->addSelectOption($a.' ('.$l['Count'].')',$l[$alias]);
-				}
-			}
-			else{
-				foreach($list as $l){
-					$a=$l[$alias];
-					if($l[$alias]==''){
-						$a = '[Empty]';
-					}
-					$this->formFilter->getItem($alias)->addSelectOption($a,$l[$alias]);
-				}
-			}
-			
-			$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-			$this->formFilter->getItem($alias)->setAutoCompletion(false);
-		}
-		else{
-			$this->formFilter->addItem(new Text($alias));
-			$this->formFilter->getItem($alias)->addOption('onchange', 'document.'.$this->formFilter->getFullName() . '.submit();');
-			$this->formFilter->getItem($alias)->setAutoCompletion(false);
-		}
+		$sql2->addGroupBy($tableAlias . '.' . $field);
+		$sql2->addOrderBy($tableAlias . '.' . $field, 'ASC');
+		$list = DbCo::getQuery($sql2->toString(), $sql2->getArgs());
 
+		// crée multiselect dans le formulaire
+		if (count($list) <= $max) {
+			$this->formFilter->addItem(new MultiSelect($alias, null));
+			if ($displayCount) {
+				foreach ($list as $l) {
+					$a = $l[$alias];
+					if ($l[$alias] == '') {
+						$a = '[Empty]';
+					}
+					$this->formFilter->getItem($alias)->addSelectOption($a . ' (' . $l['Count'] . ')', $l[$alias]);
+				}
+			} else {
+				foreach ($list as $l) {
+					$a = $l[$alias];
+					if ($l[$alias] == '') {
+						$a = '[Empty]';
+					}
+					$this->formFilter->getItem($alias)->addSelectOption($a, $l[$alias]);
+				}
+			}
+
+			$this->formFilter->getItem($alias)->addOption('onchange', 'document.' . $this->formFilter->getFullName() . '.submit();');
+			$this->formFilter->getItem($alias)->setAutoCompletion(false);
+		} else {
+			$this->formFilter->addItem(new Text($alias));
+			$this->formFilter->getItem($alias)->addOption('onchange', 'document.' . $this->formFilter->getFullName() . '.submit();');
+			$this->formFilter->getItem($alias)->setAutoCompletion(false);
+		}
 	}
 
-	function addFilterInDataset($dataset){
+	function addFilterInDataset($dataset)
+	{
 
-		$tmp=array();
-		if(isset($dataset[0]) and is_array($dataset[0])){
-			foreach($dataset[0] as $k=>$v){
+		$tmp = array();
+		if (isset($dataset[0]) and is_array($dataset[0])) {
+			foreach ($dataset[0] as $k => $v) {
 				$field = $k;
-				$fieldSort = $k.'_SORT';
-				$tmp[$field]='';
-				if($this->formFilter->getItem($field)!==null){
-					
-					$tmp[$field].=$this->formFilter->getItem($field)->toString();
+				$fieldSort = $k . '_SORT';
+				$tmp[$field] = '';
+				if ($this->formFilter->getItem($field) !== null) {
+
+					$tmp[$field] .= $this->formFilter->getItem($field)->toString();
 					//$tmp[$field].='<br>';
-					$tmp[$field].=$this->formFilter->getItem($fieldSort)->toString();
-				
+					$tmp[$field] .= $this->formFilter->getItem($fieldSort)->toString();
 				}
 			}
 
-			$tmp2=array();
-			$tmp2[]=$tmp;
+			$tmp2 = array();
+			$tmp2[] = $tmp;
 
-			foreach($dataset as $line){
-				$tmp2[]=$line;
+			foreach ($dataset as $line) {
+				$tmp2[] = $line;
 			}
-			$dataset=$tmp2;
-		}
-		else if($this->sql_brut!=null){
+			$dataset = $tmp2;
+		} else if ($this->sql_brut != null) {
 
-			foreach($this->sql_brut->getValidField() as $line){
+			foreach ($this->sql_brut->getValidField() as $line) {
 				$field = $line['alias'];
-				$fieldSort = $line['alias'].'_SORT';
-				$tmp[$field]='';
-				if($this->formFilter->getItem($field)!==null){
+				$fieldSort = $line['alias'] . '_SORT';
+				$tmp[$field] = '';
+				if ($this->formFilter->getItem($field) !== null) {
 					//$tmp[$k]=$this->formFilter->showStart();
-					$tmp[$field].=$this->formFilter->getItem($field)->toString();
-					$tmp[$field].=$this->formFilter->getItem($fieldSort)->toString();
+					$tmp[$field] .= $this->formFilter->getItem($field)->toString();
+					$tmp[$field] .= $this->formFilter->getItem($fieldSort)->toString();
 					//$tmp[$k].=$this->formFilter->showEnd();
 				}
 			}
 
-			$tmp2=array();
-			$tmp2[]=$tmp;
+			$tmp2 = array();
+			$tmp2[] = $tmp;
 
-			foreach($dataset as $line){
-				$tmp2[]=$line;
+			foreach ($dataset as $line) {
+				$tmp2[] = $line;
 			}
-			$dataset=$tmp2;
+			$dataset = $tmp2;
 		}
 
 		return $dataset;
-		
 	}
 
 
 
-	function getOperator($field, $value,$opAND=true){
+	function getOperator($field, $value, $opAND = true)
+	{
 		$listValue = array();
 		$operator = '';
-		$found=false;
+		$found = false;
 
 		$ope = 'AND';
-		if($opAND===false){
-			$ope='OR';
+		if ($opAND === false) {
+			$ope = 'OR';
 		}
 
 		$arrayOp = array();
-		
-		if(!is_array($value))$value = array($value);
 
-		foreach($value as $v){
+		if (!is_array($value)) $value = array($value);
+
+		foreach ($value as $v) {
 			preg_match_all('/(<>|!=|>=|<=|=|<|>)([^(<>|!=|>=|<=|=|<|>)]+)/i', $v, $arrayOp);
-		
+
 			if (isset($arrayOp[2]) and count($arrayOp[2])) {
 				foreach ($arrayOp[2] as $i => $item) {
 					if ($item != '') {
-						if($operator!='')$operator .= ' '.$ope.' ';
-						$operator .= $field.' '.$arrayOp[1][$i].' ?';
-						
-						$listValue[]=trim($item);
-						$found=true;
+						if ($operator != '') $operator .= ' ' . $ope . ' ';
+						$operator .= $field . ' ' . $arrayOp[1][$i] . ' ?';
+
+						$listValue[] = Tool::custom_trim($item);
+						$found = true;
 					}
 				}
 			}
-		
-		
-		
-		
+
+
+
+
 			$arrayIn = array();
 			preg_match_all('/(not in|in)\(([^in\(]+)\)/i', $v, $arrayIn);
 
-				if (isset($arrayIn[2]) and count($arrayIn[2])) {
-					foreach ($arrayIn[2] as $i => $item) {
-						$op = $arrayIn[1][$i];
-						$listvalues = preg_split('/(,|;|-)/i', $item);
-						$strval = '';
-						foreach ($listvalues as $j => $val) {
+			if (isset($arrayIn[2]) and count($arrayIn[2])) {
+				foreach ($arrayIn[2] as $i => $item) {
+					$op = $arrayIn[1][$i];
+					$listvalues = preg_split('/(,|;|-)/i', $item);
+					$strval = '';
+					foreach ($listvalues as $j => $val) {
 
-							
-							if ($strval != "") $strval .= ', ';
-							$strval .= '?';
-							$listValue[] = trim($val, " \t\n\r\0\x0B'");
-						}
 
-						if($operator!='')$operator .= ' '.$ope.' ';
-						$operator .=  $field.' '.$op.'('.$strval.')';
-						$found=true;
+						if ($strval != "") $strval .= ', ';
+						$strval .= '?';
+						$listValue[] = Tool::custom_trim($val, " \t\n\r\0\x0B'");
 					}
-				}
-			
 
-			if($found==false){
-				if($field!=''){
-					if($operator!='')$operator .= ' '.$ope.' ';	
-					$operator .= $field.' like ?';
+					if ($operator != '') $operator .= ' ' . $ope . ' ';
+					$operator .=  $field . ' ' . $op . '(' . $strval . ')';
+					$found = true;
+				}
+			}
+
+
+			if ($found == false) {
+				if ($field != '') {
+					if ($operator != '') $operator .= ' ' . $ope . ' ';
+					$operator .= $field . ' like ?';
 					$listValue[] = '%' . $v . '%';
 				}
-				
-				
 			}
 		}
 
 
-		return array('operator'=>$operator,'values'=>$listValue);
+		return array('operator' => $operator, 'values' => $listValue);
 	}
 
-	function getOperatorMultiSelect($field, $value){
+	function getOperatorMultiSelect($field, $value)
+	{
 		$listValue = array();
 		$operator = '';
-		
+
 		$null = '';
 
-		if(!is_array($value))$value = array($value);
-		
-		foreach($value as $v){
-			if($v==''){
-				$null = ' OR isnull('.$field.')';
+		if (!is_array($value)) $value = array($value);
+
+		foreach ($value as $v) {
+			if ($v == '') {
+				$null = ' OR isnull(' . $field . ')';
 			}
-			if($operator!='')$operator.=',';
-			$operator.='?';
-			
-			$listValue[]=trim($v);
+			if ($operator != '') $operator .= ',';
+			$operator .= '?';
+
+			$listValue[] = Tool::custom_trim($v);
 		}
 
-		$operator = $field.' in('.$operator.')'.$null;
-		
-		return array('operator'=>$operator,'values'=>$listValue);
+		$operator = $field . ' in(' . $operator . ')' . $null;
+
+		return array('operator' => $operator, 'values' => $listValue);
 	}
 
-	function adaptPage($correction=true){
+	function adaptPage($correction = true)
+	{
 		// definition des seuils acceptables de PAGINATION
 		$page = $this->formFilter->getItem('_Page')->getValue();
 		$pagination = $this->formFilter->getItem('Pagination')->getValue();
 		$count = $this->getCount();
-		
-		$min=1;
-		$max=$count;
+
+		$min = 1;
+		$max = $count;
 
 		// réinitialisation à la valeur par defaut si la valeurs sort des cadres spécifier
-		if((!is_numeric($pagination) or $pagination>$max or $pagination<$min) and $correction){
+		if ((!is_numeric($pagination) or $pagination > $max or $pagination < $min) and $correction) {
 			$this->formFilter->getItem('Pagination')->forceValue($this->pagination);
 		}
 
 		$pagination = $this->formFilter->getItem('Pagination')->getValue();
-		$min=1;
+		$min = 1;
 
-		
-		$max=ceil($count/$pagination);
+
+		$max = ceil($count / $pagination);
 		// definition des seuils acceptables de PAGE
-		$this->formFilter->getItem('_Page')->setMinMax($min,$max);
-		
+		$this->formFilter->getItem('_Page')->setMinMax($min, $max);
+
 		// réinitialisation à la valeur par defaut si la valeurs sort des cadres spécifier
-		if((!is_numeric($page) or $page>$max or $page<$min) and $correction){
+		if ((!is_numeric($page) or $page > $max or $page < $min) and $correction) {
 			$this->formFilter->getItem('_Page')->forceValue($min);
 		}
 
 
-		
+
 
 		// stockage des valeurs finals acceptables
 		$this->currentPage = $this->formFilter->getItem('_Page')->getValue();
 		$this->currentPagination = $this->formFilter->getItem('Pagination')->getValue();
 	}
 
-	function createDataSet(){
-		
+	function createDataSet()
+	{
+
 		$this->setCount();
 		$this->adaptPage();
-		$this->sql_brut->setLimit((($this->currentPage-1)*$this->currentPagination),$this->currentPagination);
+		$this->sql_brut->setLimit((($this->currentPage - 1) * $this->currentPagination), $this->currentPagination);
 		$this->dataset = DbCo::getQuery($this->sql_brut->toString(), $this->sql_brut->getArgs());
-		
 	}
-	
-	function showPagination(){
+
+	function showPagination()
+	{
 		//$this->adaptPage();
 		$cal = ceil($this->getCount() / $this->currentPagination);
-		
 
-		return '<span>Page ' . $this->formFilter->getItem('_Page')->toString() . ' of ' . $cal . ' - ' . $this->formFilter->getItem('Pagination')->toString() . ' by page <span>' ;
+
+		return '<span>Page ' . $this->formFilter->getItem('_Page')->toString() . ' of ' . $cal . ' - ' . $this->formFilter->getItem('Pagination')->toString() . ' by page <span>';
 	}
 
-	function cleanDataset($dataset){
+	function cleanDataset($dataset)
+	{
 
-		if($this->sql_brut->showPrimaryKey()===true){
+		if ($this->sql_brut->showPrimaryKey() === true) {
 			$pm = $this->sql_brut->getPrimaryField();
 			$field = $pm['alias'];
-			foreach($dataset as &$line){
-				if(isset($line[$field])){
+			foreach ($dataset as &$line) {
+				if (isset($line[$field])) {
 					unset($line[$field]);
 				}
 			}
@@ -3694,182 +3705,183 @@ class DataViewer2
 		return $dataset;
 	}
 
-	function addEditMode($dataset){
+	function addEditMode($dataset)
+	{
 		$key = $this->labelEditMode;
 		$pm = $this->sql_brut->getPrimaryField();
-		
 
-		if($this->editMode===true and count($pm)){
+
+		if ($this->editMode === true and count($pm)) {
 			$alias = $pm['alias'];
 			$form = $this->formFilter;
-			foreach($dataset as $nb=>&$line){
-				
-				$tmp = array($key=>'');
-				$line = array_merge($tmp,$line);
+			foreach ($dataset as $nb => &$line) {
+
+				$tmp = array($key => '');
+				$line = array_merge($tmp, $line);
 				$v = &$line[$key];
-				$k = 'EDIT_'.$line[$alias];
-				if(isset($line[$alias]) and $this->getCommandeOption()!==$k){
-					$ref = $alias.'_'.$nb;
+				$k = 'EDIT_' . $line[$alias];
+				if (isset($line[$alias]) and $this->getCommandeOption() !== $k) {
+					$ref = $alias . '_' . $nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Edit');
-					self::setEvent($form->getItem($ref),$k);
+					self::setEvent($form->getItem($ref), $k);
 					$v = $form->getItem($ref)->toString();
-				}
-				else if(isset($line[$alias]) and $this->getCommandeOption()===$k){
-					$ref = $alias.'_'.$nb;
+				} else if (isset($line[$alias]) and $this->getCommandeOption() === $k) {
+					$ref = $alias . '_' . $nb;
 					$form->addItem(new Button($ref));
 					$form->getItem($ref)->setValue('Cancel');
-					self::setEvent($form->getItem($ref),'');
+					self::setEvent($form->getItem($ref), '');
 					$v = $form->getItem($ref)->toString();
 				}
-				
-
 			}
 			unset($line);
 		}
 		return $dataset;
 	}
 
-	function addForm(){
-		if($this->editMode and strstr($this->getCommandeOption(),'EDIT_')!==false){
+	function addForm()
+	{
+		if ($this->editMode and strstr($this->getCommandeOption(), 'EDIT_') !== false) {
 
-			$id = str_replace('EDIT_','',$this->getCommandeOption());
+			$id = str_replace('EDIT_', '', $this->getCommandeOption());
 			$pm = $this->sql_brut->getPrimaryTable();
 			$pf = $this->sql_brut->getPrimaryField();
-			
-			$this->formEdit = new Form($this->title.'_'.$this->labelEditMode,
-										$pm['table'],
-										DbCo::getPDO(),
-										$pf['field'].'='.$id,
-										$pm['db']);	
-			$this->formEdit->setDebug($this->debug);	
-			$this->formEdit->autocreate();	
-			
-		}
-		else if($this->editMode and $this->getCommandeOption()==='NEWRECORD'){
+
+			$this->formEdit = new Form(
+				$this->title . '_' . $this->labelEditMode,
+				$pm['table'],
+				DbCo::getPDO(),
+				$pf['field'] . '=' . $id,
+				$pm['db']
+			);
+			$this->formEdit->setDebug($this->debug);
+			$this->formEdit->autocreate();
+		} else if ($this->editMode and $this->getCommandeOption() === 'NEWRECORD') {
 			$pm = $this->sql_brut->getPrimaryTable();
 			$pf = $this->sql_brut->getPrimaryField();
-			$this->formEdit = new Form($this->title.'_'.$this->labelEditMode,
-										$pm['table'],
-										DbCo::getPDO(),
-										null,
-										$pm['db']);	
-			$this->formEdit->setDebug($this->debug);	
-			$this->formEdit->autocreate();	
-		
-			
+			$this->formEdit = new Form(
+				$this->title . '_' . $this->labelEditMode,
+				$pm['table'],
+				DbCo::getPDO(),
+				null,
+				$pm['db']
+			);
+			$this->formEdit->setDebug($this->debug);
+			$this->formEdit->autocreate();
 		}
 	}
 
-	function saveForm(){
-		if($this->editMode and $this->formEdit!=null and strstr($this->getCommandeOption(),'EDIT_')!==false){
-			$this->formEdit->recoveryValue();	
-			$this->formEdit->init();	
-			if($this->formEdit->getIsUpdate()==true){
+	function saveForm()
+	{
+		if ($this->editMode and $this->formEdit != null and strstr($this->getCommandeOption(), 'EDIT_') !== false) {
+			$this->formEdit->recoveryValue();
+			$this->formEdit->init();
+			if ($this->formEdit->getIsUpdate() == true) {
 				$this->setCommandeOption('');
-				$this->displayForm=false;
+				$this->displayForm = false;
 				$this->partialInit(true);
 			}
-		}
-		else if($this->editMode and $this->formEdit!=null and $this->getCommandeOption()==='NEWRECORD'){
+		} else if ($this->editMode and $this->formEdit != null and $this->getCommandeOption() === 'NEWRECORD') {
 			$this->formEdit->newRecord();
-			$this->formEdit->init();	
-			if($this->formEdit->getInsert()==true){
+			$this->formEdit->init();
+			if ($this->formEdit->getInsert() == true) {
 				$this->setCommandeOption('');
-				$this->displayForm=false;
+				$this->displayForm = false;
 				$this->partialInit(true);
-				
-			}else{
+			} else {
 				$this->formFilter->getItem('New Record')->setValue('Cancel New Record');
-				self::setEvent($this->formFilter->getItem('New Record'),'');
+				self::setEvent($this->formFilter->getItem('New Record'), '');
 			}
-
-
 		}
-
 	}
 
-	function setDisplayForm(bool $bool){
-		$this->displayForm=$bool;
+	function setDisplayForm(bool $bool)
+	{
+		$this->displayForm = $bool;
 	}
-	function getDisplayForm(){
+	function getDisplayForm()
+	{
 		return $this->displayForm;
 	}
 
-	function showForm(){
-		if($this->formEdit!==null and $this->displayForm===true and $this->itemDisplay!=null){
+	function showForm()
+	{
+		if ($this->formEdit !== null and $this->displayForm === true and $this->itemDisplay != null) {
 			return $this->itemDisplay->toString();
 		}
-		if($this->formEdit!==null and $this->displayForm===true){
+		if ($this->formEdit !== null and $this->displayForm === true) {
 			return $this->formEdit->toString();
 		}
 		return '';
 	}
 
-	function setItemDisplay($itemDisplay){
-		$this->itemDisplay=$itemDisplay;
+	function setItemDisplay($itemDisplay)
+	{
+		$this->itemDisplay = $itemDisplay;
 	}
 
-	function partialInit(bool $force=false){
-		if($this->init===false or $force===true){
-			$this->init=true;
+	function partialInit(bool $force = false)
+	{
+		if ($this->init === false or $force === true) {
+			$this->init = true;
 			$this->setFilter();
 			$this->addForm();
 			$this->createDataSet();
-			
 		}
-		
 	}
 
-	function fullinit(bool $force=false){
+	function fullinit(bool $force = false)
+	{
 
 		$this->partialInit($force);
 		$this->saveForm();
-		if($this->init2===false or $force===true){
-			$this->init2=true;
+		if ($this->init2 === false or $force === true) {
+			$this->init2 = true;
 			$dataset = $this->dataset;
-		
-		
+
+
 			$dataset = $this->addEditMode($dataset);
 			$dataset = $this->cleanDataset($dataset);
 			$dataset = $this->addFilterInDataset($dataset);
 
-			$this->datasetFinal=$dataset;
+			$this->datasetFinal = $dataset;
 		}
-		
 	}
 
 
 
-	function getForm(){
+	function getForm(): Form|null
+	{
 		return $this->formEdit;
 	}
 
-	function setForm($form){
-		$this->formEdit=$form;
+	function setForm($form)
+	{
+		$this->formEdit = $form;
 	}
 
-	function getDataset(){
-		if($this->datasetFinal!==null){
+	function getDataset()
+	{
+		if ($this->datasetFinal !== null) {
 			return $this->datasetFinal;
 		}
 		return $this->dataset;
 	}
 
-	function setDataset($dataset){
-		if($this->datasetFinal!==null){
-			$this->datasetFinal=$dataset;
-		}else{
+	function setDataset($dataset)
+	{
+		if ($this->datasetFinal !== null) {
+			$this->datasetFinal = $dataset;
+		} else {
 			$this->dataset = $dataset;
 		}
-		
 	}
 
-	function getIsActif(){
-		if($this->formFilter!=null and $this->formFilter->getPostExist()==true){
+	function getIsActif()
+	{
+		if ($this->formFilter != null and $this->formFilter->getPostExist() == true) {
 			return true;
-		}
-		else if($this->formEdit!= null and get_class($this->formEdit)=='Form' and $this->formEdit->getPostExist()==true){
+		} else if ($this->formEdit != null and get_class($this->formEdit) == 'Form' and $this->formEdit->getPostExist() == true) {
 			return true;
 		}
 		return false;
@@ -3879,32 +3891,32 @@ class DataViewer2
 	{
 
 		$this->fullInit();
-		
-		
+
+
 		$title = '';
-		
+
 		$title .= $this->formFilter->getItem('Option')->toString();
 		$title .= $this->formFilter->getItem('Search')->toString();
-		$title .= $this->formFilter->getItem('Reinitialize')->toString().' ';
+		$title .= $this->formFilter->getItem('Reinitialize')->toString() . ' ';
 		$title .= 'Count:' . $this->getCount();
-		
-		if($this->recordMode===true){
-			$title .= $this->formFilter->getItem('New Record')->toString().' ';
+
+		if ($this->recordMode === true) {
+			$title .= $this->formFilter->getItem('New Record')->toString() . ' ';
 		}
-		$title .= ' '.$this->formFilter->getItem('Global_Search')->toString();
+		$title .= ' ' . $this->formFilter->getItem('Global_Search')->toString();
 		$set = new DataSet($title, $this->datasetFinal);
 
 		$str = '';
 		$str .= $this->showForm();
-		
-		if($this->formFilter!=null)$str .= $this->formFilter->showStart();
+
+		if ($this->formFilter != null) $str .= $this->formFilter->showStart();
 		$str .= $set->toString();
 		$str .= $this->showPagination();
-		if($this->formFilter!=null)$str .= $this->formFilter->showEnd();
+		if ($this->formFilter != null) $str .= $this->formFilter->showEnd();
 
-		
 
-		
+
+
 		return  $str;
 	}
 }
@@ -3931,10 +3943,10 @@ class SQL
 		}
 
 		$this->primaryTable = array('db' => $db, 'table' => $table, 'alias' => $alias);
-		
 	}
 
-	function getPrimaryTable(){
+	function getPrimaryTable()
+	{
 		return $this->primaryTable;
 	}
 
@@ -3942,8 +3954,9 @@ class SQL
 	{
 	}
 
-	function setDistinct(bool $bool=false){
-		$this->distinct=$bool;
+	function setDistinct(bool $bool = false)
+	{
+		$this->distinct = $bool;
 	}
 
 	function setPrimaryField($tableAlias, $field, $alias = null)
@@ -3953,7 +3966,8 @@ class SQL
 		}
 		$this->primaryField = array('tableAlias' => $tableAlias, 'field' => $field, 'alias' => $alias, 'type' => 'Primary', 'ExistInField' => false);
 	}
-	function getPrimaryField(){
+	function getPrimaryField()
+	{
 		return $this->primaryField;
 	}
 	function addField($tableAlias, $field, $alias = null)
@@ -3964,16 +3978,16 @@ class SQL
 		$this->fields[] = array('tableAlias' => $tableAlias, 'field' => $field, 'alias' => $alias, 'type' => 'field');
 	}
 
-	function getValidField(){
+	function getValidField()
+	{
 		$tmp = array();
 		foreach ($this->fields as $line) {
 			if (!($line['type'] === 'function' and !count($this->groupBy))) {
-				$tmp[]=$line;
+				$tmp[] = $line;
 			}
 		}
 
 		return $tmp;
-
 	}
 
 	function getFields()
@@ -4009,11 +4023,11 @@ class SQL
 	}
 	function addJoin($db, $table, $alias, $onClause, $type = '')
 	{
-		$this->joins[] = array('db' => $db, 'table' => $table, 'alias' => $alias, 'onClause' => $onClause, 'type' => $type,'subquery'=>0);
+		$this->joins[] = array('db' => $db, 'table' => $table, 'alias' => $alias, 'onClause' => $onClause, 'type' => $type, 'subquery' => 0);
 	}
 	function addSubQueryJoin($subQuery, $alias, $onClause, $type = '')
 	{
-		$this->joins[] = array('table' => $subQuery, 'alias' => $alias, 'onClause' => $onClause, 'type' => $type,'subquery'=>1);
+		$this->joins[] = array('table' => $subQuery, 'alias' => $alias, 'onClause' => $onClause, 'type' => $type, 'subquery' => 1);
 	}
 	function addWhere($arg, $params = [])
 	{
@@ -4025,7 +4039,7 @@ class SQL
 	}
 	function cleanHaving()
 	{
-		$this->having=array();
+		$this->having = array();
 	}
 	function addGroupBy($arg)
 	{
@@ -4038,15 +4052,16 @@ class SQL
 
 	function cleanGroupBy()
 	{
-		$this->groupBy=array();
+		$this->groupBy = array();
 	}
 	function addOrderBy($arg, $sort = 'ASC')
 	{
 		$this->orderBy[] = array('arg' => $arg, 'sort' => $sort);
 	}
 
-	function cleanOrderBy(){
-		$this->orderBy=array();
+	function cleanOrderBy()
+	{
+		$this->orderBy = array();
 	}
 
 	function setLimit($start, $nbrOfRecord)
@@ -4058,7 +4073,8 @@ class SQL
 		$this->limit = array();
 	}
 
-	function showPrimaryKey(){
+	function showPrimaryKey()
+	{
 		$addPrimaryField = true;
 
 		if (count($this->primaryField)) {
@@ -4069,8 +4085,7 @@ class SQL
 					break;
 				}
 			}
-		}
-		else{
+		} else {
 			$addPrimaryField = false;
 		}
 
@@ -4104,19 +4119,18 @@ class SQL
 			}
 		}
 
-		$distinct='';
-		if($this->distinct===true){
+		$distinct = '';
+		if ($this->distinct === true) {
 			$distinct = 'DISTINCT ';
 		}
-		
-		
-		if($this->primaryTable['db']!=''){
+
+
+		if ($this->primaryTable['db'] != '') {
 			$name = '`' . $this->primaryTable['db'] . '`.`' . $this->primaryTable['table'] . '` AS `' . $this->primaryTable['alias'] . '`';
-		}
-		else{
+		} else {
 			$name = '`' . $this->primaryTable['table'] . '` AS `' . $this->primaryTable['alias'] . '`';
 		}
-		return 'SELECT ' .$distinct. $str . ' FROM '.$name;
+		return 'SELECT ' . $distinct . $str . ' FROM ' . $name;
 	}
 	function showJoin()
 	{
@@ -4125,18 +4139,15 @@ class SQL
 			if ($str != '') {
 				$str .= chr(13);
 			}
-			if($line['subquery']==0){
-				if($line['db']!=''){
+			if ($line['subquery'] == 0) {
+				if ($line['db'] != '') {
 					$str .= $line['type'] . ' JOIN `' . $line['db'] . '`.`' . $line['table'] . '` AS ' . $line['alias'] . ' ON ' . $line['onClause'];
-				}
-				else{
+				} else {
 					$str .= $line['type'] . ' JOIN `' . $line['table'] . '` AS ' . $line['alias'] . ' ON ' . $line['onClause'];
-	
 				}
-			}else{
-				$str .= $line['type'] . ' JOIN (' . $line['table']. ') AS ' . $line['alias'] . ' ON ' . $line['onClause'];
+			} else {
+				$str .= $line['type'] . ' JOIN (' . $line['table'] . ') AS ' . $line['alias'] . ' ON ' . $line['onClause'];
 			}
-			
 		}
 
 		if ($str != '') {
@@ -4256,7 +4267,7 @@ class SQL
 		return '';
 	}
 
-	
+
 
 	function toString()
 	{
@@ -4276,7 +4287,6 @@ class SQL
 	{
 		return $this->args;
 	}
-
 }
 
 
