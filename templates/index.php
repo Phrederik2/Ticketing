@@ -25,10 +25,8 @@ style('ticketing', 'notice');
 
 style('ticketing', 'style');
 
-$file =  $_SERVER['SCRIPT_FILENAME'].'apps/ticketing/templates/TicketingTemplate';
-$file = str_replace('index.php','',$file);
+$file =  $_SERVER['SCRIPT_FILENAME'] . 'apps/ticketing/templates/TicketingTemplate';
+$file = str_replace('index.php', '', $file);
 $file .= '/index.php';
 
-include_once ($file);
-
-?>
+include_once($file);
