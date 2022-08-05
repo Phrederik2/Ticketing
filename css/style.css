@@ -277,6 +277,10 @@ select {
 	background-color: white;*/
 }
 
+.Box{
+  background-color: red;
+}
+
 .trumbowyg-box,
 .trumbowyg-editor {
   min-height: 150px;

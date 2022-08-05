@@ -454,18 +454,25 @@ class Query
 		return DbCo::getQuery($sql, [$id]);
 	}
 
-	static function getBooklet($id)
+	static function getBooklet($id, $publicKey = null)
 	{
-		$sql = 'SELECT c.name,b.name as bookletName, b.initialpoint, 
+		$where = 'b.id=?';
+		$args = [$id];
+		if ($publicKey != null) {
+			$where = 'b.publickey=?';
+			$args = [$publicKey];
+		}
+
+		$sql = "SELECT c.name,b.name as bookletName, b.initialpoint, date(b.createmoment) as createDate,
 		sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointuse, 
 		sum(if(i.gift!=0,i.point,null)) as sumpointgift, 
 		b.initialpoint-sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointremaining
 		FROM TicketingCustomer as c 
 				LEFT join TicketingBooklet as b on c.id=b.customer_id
 				left join TicketingIntervention as i on b.id=i.booklet_id
-				WHERE b.id=? and i.isdelete=0';
+				WHERE $where and i.isdelete=0";
 
-		return DbCo::getQuery($sql, [$id]);
+		return DbCo::getQuery($sql, $args);
 	}
 
 	static function setOverrideIntervention($id, $overridepoint)
@@ -478,12 +485,12 @@ class Query
 		return DbCo::getQuery($sql, [$overridepoint, $id]);
 	}
 
-	static function setNewCarnet($customerid, $initialPoint, $key,$name)
+	static function setNewCarnet($customerid, $initialPoint, $key, $name)
 	{
 		$sql = 'INSERT INTO TicketingBooklet (publickey,customer_id,initialpoint,name) VALUES (?,?,?,?);
 				COMMIT;';
 
-		return DbCo::getQuery($sql, [$key, $customerid, $initialPoint,$name]);
+		return DbCo::getQuery($sql, [$key, $customerid, $initialPoint, $name]);
 	}
 
 	static function getMaxBookletForCustomer($customerid)
@@ -648,5 +655,13 @@ class Query
         ";
 
 		return DbCo::getQuery($sql, [$labelAdmin]);
+	}
+	static function getBookletByPublicKey($publickey)
+	{
+		$sql = "SELECT name, initialPoint, date(createmoment) as createDate  FROM TicketingBooklet
+		WHERE publickey=?;
+        ";
+
+		return DbCo::getQuery($sql, [$publickey]);
 	}
 }
