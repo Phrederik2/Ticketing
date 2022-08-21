@@ -418,7 +418,7 @@ class customer_Frame extends Cadre_Base
             $nbr = Query::getNbrBookletCustomer($id);
             $form->getItem('name')->setRequired(true);
 
-            $form->getItem('name')->setDefaultValue($data[0]['name'] . '_' . $nbr[0]['count'] + 1);
+            $form->getItem('name')->setDefaultValue($data[0]['name'] . '_' . ($nbr[0]['count'] + 1));
 
 
             $form->getElement('initialpoint')->setTitle('Nombre de point initiale');

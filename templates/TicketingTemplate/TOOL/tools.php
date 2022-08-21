@@ -3,11 +3,11 @@
 
 date_default_timezone_set('Europe/Brussels');
 
-enum target: string
+/*enum target: string
 {
 	case self = '_self';
 	case blank = '_blank';
-}
+}*/
 
 class Tool
 {

@@ -3195,7 +3195,7 @@ class DataViewer2
 		// création du formulaire
 		$sha = sha1(serialize($this->sql_brut->getPrimaryTable()));
 		$this->formFilter = new Form(get_class($this) . '_' . $this->title . '_' . $sha);
-		
+
 		// on sauve les valeurs dans la session 
 		$this->formFilter->setSaveValueInSession(true);
 

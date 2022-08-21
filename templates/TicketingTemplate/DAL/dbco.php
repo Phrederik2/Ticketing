@@ -466,7 +466,8 @@ class Query
 		$sql = "SELECT c.name,b.name as bookletName, b.initialpoint, date(b.createmoment) as createDate,
 		sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointuse, 
 		sum(if(i.gift!=0,i.point,null)) as sumpointgift, 
-		b.initialpoint-sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointremaining
+		b.initialpoint-sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointremaining,
+		b.publicKey as reference, b.id as id
 		FROM TicketingCustomer as c 
 				LEFT join TicketingBooklet as b on c.id=b.customer_id
 				left join TicketingIntervention as i on b.id=i.booklet_id
@@ -498,6 +499,15 @@ class Query
 		$sql = 'SELECT max(id) as max FROM TicketingBooklet WHERE customer_id=?';
 
 		return DbCo::getQuery($sql, [$customerid]);
+	}
+
+	static function getInterventionsByBooklet($bookletId)
+	{
+		$sql = "SELECT gift, date_format(start,'%d/%m/%Y %H:%i') start, date_format(end,'%d/%m/%Y %H:%i') end, if(u.displayname='' or u.displayname=null,i.user,u.displayname) displayuser, remark, if(override=1,overridepoint,point) finalpoint FROM TicketingIntervention as i
+		left join oc_users as u on i.user=u.uid
+		WHERE booklet_id=? and isdelete=0";
+
+		return DbCo::getQuery($sql, [$bookletId]);
 	}
 
 	static function setNewInterventionOverride($interventionOrigine, $bookletid, $overridePoint, $key)
