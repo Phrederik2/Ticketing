@@ -452,10 +452,6 @@ class customer_Frame extends Cadre_Base
 
         $view->setDataset($dataset);
 
-
-
-
-
         $fieldset = new FieldSet('Détail du client selectionné');
         $fieldset->add_HTML_Class('Box');
         if (isset($data[0]['name'])) {
@@ -559,9 +555,6 @@ class customer_Frame extends Cadre_Base
         $data = $view->getDataset();
         $data = $this->setSwitcherInDataset($data, ['Cadeaux']);
         $data = $this->setRemark($data, ['Remarque']);
-        //$data = $this->setPublicShare($data,'Public Share');
-
-
 
         $view->setDataset($data);
 
@@ -605,6 +598,8 @@ class customer_Frame extends Cadre_Base
             $fieldset->add(new Field('Somme des points utilisés', $data[0]['sumpointuse']));
             $fieldset->add(new Field('Somme des points cadeaux', $data[0]['sumpointgift']));
             $fieldset->add(new Field('Somme des points restant', $data[0]['sumpointremaining']));
+            $fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=0132f220f3e8f251f4ccdc230e4af32cc2461194', false)));
+
 
             $list = $fieldset->get();
 

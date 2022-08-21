@@ -469,9 +469,11 @@ class Query
 		b.initialpoint-sum(if(i.gift=0,if(i.override=1,i.overridepoint,i.point),null)) as sumpointremaining,
 		b.publicKey as reference, b.id as id
 		FROM TicketingCustomer as c 
-				LEFT join TicketingBooklet as b on c.id=b.customer_id
-				left join TicketingIntervention as i on b.id=i.booklet_id
-				WHERE $where and i.isdelete=0";
+		LEFT join TicketingBooklet as b on c.id=b.customer_id
+		left join TicketingIntervention as i on b.id=i.booklet_id
+		WHERE $where and i.isdelete=0
+		
+		";
 
 		return DbCo::getQuery($sql, $args);
 	}
@@ -504,8 +506,10 @@ class Query
 	static function getInterventionsByBooklet($bookletId)
 	{
 		$sql = "SELECT gift, date_format(start,'%d/%m/%Y %H:%i') start, date_format(end,'%d/%m/%Y %H:%i') end, if(u.displayname='' or u.displayname=null,i.user,u.displayname) displayuser, remark, if(override=1,overridepoint,point) finalpoint FROM TicketingIntervention as i
-		left join oc_users as u on i.user=u.uid
-		WHERE booklet_id=? and isdelete=0";
+				LEFT JOIN oc_users as u on i.user=u.uid
+				WHERE booklet_id=? and isdelete=0
+				ORDER BY start desc, end desc
+		";
 
 		return DbCo::getQuery($sql, [$bookletId]);
 	}

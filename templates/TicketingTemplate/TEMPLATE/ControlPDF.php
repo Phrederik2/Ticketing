@@ -118,8 +118,6 @@ class Control_PDF_Frame extends Cadre_Base
 
 			foreach ($itemsList as $element) {
 				$items .= $this->setInterventionItem($item, $element);
-				$items .= $this->setInterventionItem($item, $element);
-				$items .= $this->setInterventionItem($item, $element);
 			}
 		}
 
