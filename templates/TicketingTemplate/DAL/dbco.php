@@ -678,4 +678,13 @@ class Query
 
 		return DbCo::getQuery($sql, [$publickey]);
 	}
+
+	static function getPublicKeyByBooklet($id)
+	{
+		$sql = "SELECT publicKey  FROM TicketingBooklet
+		WHERE id=?;
+        ";
+
+		return DbCo::getQuery($sql, [$id]);
+	}
 }

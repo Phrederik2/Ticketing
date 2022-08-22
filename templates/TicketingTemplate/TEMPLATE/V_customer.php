@@ -598,7 +598,13 @@ class customer_Frame extends Cadre_Base
             $fieldset->add(new Field('Somme des points utilisés', $data[0]['sumpointuse']));
             $fieldset->add(new Field('Somme des points cadeaux', $data[0]['sumpointgift']));
             $fieldset->add(new Field('Somme des points restant', $data[0]['sumpointremaining']));
-            $fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=0132f220f3e8f251f4ccdc230e4af32cc2461194', false)));
+
+            $publicKey = $booklet;
+            if (is_numeric($booklet)) {
+                $publicKey = Query::getPublicKeyByBooklet($booklet)[0]['publicKey'];
+            }
+
+            $fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=' . $publicKey, false)));
 
 
             $list = $fieldset->get();
