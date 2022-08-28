@@ -490,8 +490,12 @@ class Tool
 		return $str;
 	}
 
-	static function url($var = array(), $recupvalue = true)
+	static function url($var = array(), $recupvalue = true, $baselink = null)
 	{
+
+		if ($baselink === null) {
+			$baselink = self::baselink();
+		}
 
 		$strvar = '';
 		$get = array();
@@ -516,7 +520,7 @@ class Tool
 			if ($strvar != '?') $strvar .= '&';
 			$strvar .= $key . '=' . $value;
 		}
-		return self::baselink() . $strvar;
+		return $baselink . $strvar;
 	}
 
 	static function getOption($keysearch)

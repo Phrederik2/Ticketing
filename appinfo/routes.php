@@ -14,8 +14,8 @@ return [
 		['name' => 'page#indexPOST', 'url' => '/', 'verb' => 'POST'],
 		['name' => 'PublicAPI#get', 'url' => '/display/{token}', 'verb' => 'GET'],
 		['name' => 'PublicAPI#getPOST', 'url' => '/display/{token}', 'verb' => 'POST'],
-		['name' => 'page#pdf', 'url' => '/pdf', 'verb' => 'GET']
-		
+		['name' => 'page#pdf', 'url' => '/pdf', 'verb' => 'GET'],
+		['name' => 'PublicAPI#pdf', 'url' => '/display/{token}/pdf', 'verb' => 'GET']
 
 	]
 ];

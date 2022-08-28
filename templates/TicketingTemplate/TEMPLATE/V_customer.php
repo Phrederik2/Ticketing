@@ -299,7 +299,7 @@ class customer_Frame extends Cadre_Base
             $form->getItem('publickey')->setEnable(false);
 
             $fieldset = new FieldSet('Edition');
-            $fieldset->add_HTML_Class('Box');
+            //$fieldset->add_HTML_Class('Box');
 
             $this->addShare($fieldset, $form, 'Client');
 
@@ -314,7 +314,8 @@ class customer_Frame extends Cadre_Base
         // integration des lien 
         foreach ($dataset as $nb => &$line) {
             if ($nb > 0) {
-                $line['Edit'] .= Tool::buttonLink('Ouvrir', Tool::url(['client' => $line['publickey'], 'carnet' => null]));
+                $line = $this->addButtonOption($line, 'Edit', 'Ouvrir', Tool::url(['client' => $line['publickey'], 'carnet' => null]));
+
                 if ($line['Point Restant'] == 0) {
                     $line['Point Restant'] = '<span class="bad">' . $line['Point Restant'] . '</span>';
                 } else if ($line['Point Restant'] < 5) {
@@ -341,7 +342,7 @@ class customer_Frame extends Cadre_Base
         // ajoute le formulaire dans la tab
 
         $fieldset = new FieldSet('Filtre');
-        $fieldset->add_HTML_Class('Box');
+        //$fieldset->add_HTML_Class('Box');
         $fieldset->add($ff);
         //$fieldset->add(new Item('<br>'));
         $tab->addItem($fieldset);
@@ -357,6 +358,7 @@ class customer_Frame extends Cadre_Base
     {
         $sql = new SQL(DbCo::getDbName(), 'TicketingBooklet', 'c');
         $sql->setPrimaryField('c', 'id');
+
         $sql->addField('c', 'id', 'ID');
         $sql->addField('c', 'name', 'Nom');
         $sql->addField('c', 'createmoment', 'Creation');
@@ -371,6 +373,11 @@ class customer_Frame extends Cadre_Base
         $sql->addGroupBy('c.id');
 
         return $sql;
+    }
+
+    function addInFirst($line, $label, $value = '')
+    {
+        return  array_merge([$label => $value], $line);
     }
 
     function booklet($id)
@@ -390,6 +397,17 @@ class customer_Frame extends Cadre_Base
         //$view->setDebug(true);
 
         $view->partialInit();
+
+        if (!$this->canEdit) {
+            $data = $view->getDataset();
+
+            foreach ($data as &$line) {
+
+                $line = $this->addInFirst($line, 'Edit');
+            }
+            unset($line);
+            $view->setDataset($data);
+        }
 
         if ($view->getForm() != null) {
             $form = $view->getForm();
@@ -425,7 +443,7 @@ class customer_Frame extends Cadre_Base
             $form->getItem('initialpoint')->setDefaultValue('40');
 
             $fieldset = new FieldSet('Edition');
-            $fieldset->add_HTML_Class('Box');
+            //$fieldset->add_HTML_Class('Box');
 
             $this->addShare($fieldset, $form, 'Carnet');
 
@@ -439,7 +457,8 @@ class customer_Frame extends Cadre_Base
         foreach ($dataset as $nb => &$line) {
             if ($nb > 0) {
 
-                $line['Edit'] .= Tool::buttonLink('Ouvrir', Tool::url(['carnet' => $line['ID']]));
+                $line = $this->addButtonOption($line, 'Edit', 'Ouvrir', Tool::url(['carnet' => $line['ID']]));
+
                 if ($line['Solde'] == 0) {
                     $line['Solde'] = '<span class="bad">' . $line['Solde'] . '</span>';
                 } else if ($line['Solde'] < 5) {
@@ -453,7 +472,7 @@ class customer_Frame extends Cadre_Base
         $view->setDataset($dataset);
 
         $fieldset = new FieldSet('Détail du client selectionné');
-        $fieldset->add_HTML_Class('Box');
+        //$fieldset->add_HTML_Class('Box');
         if (isset($data[0]['name'])) {
             $fieldset->add(new Field('Nom du client', $data[0]['name']));
         }
@@ -471,6 +490,21 @@ class customer_Frame extends Cadre_Base
         $tab->addItem($view);
 
         return $tab;
+    }
+
+    function addButtonOption($line, $labelLine, $labelButton, $url)
+    {
+        if (isset($line[$labelLine])) {
+            $line[$labelLine] .= Tool::buttonLink($labelButton, $url);
+            return $line;
+        } else {
+            $tmp = array();
+            $tmp[$labelLine] = Tool::buttonLink($labelButton, $url);
+            foreach ($line as $key => $value) {
+                $tmp[$key] = $value;
+            }
+            return $tmp;
+        }
     }
 
     function sqlIntervention($customer = 0, $booklet = 0)
@@ -570,7 +604,7 @@ class customer_Frame extends Cadre_Base
             $form->getElement('isdelete')->setTitle('Suppression');
 
             $fieldset = new FieldSet('Edition');
-            $fieldset->add_HTML_Class('Box');
+            //$fieldset->add_HTML_Class('Box');
             $fieldset->add($form);
             $fieldset->add(new Item('<br>'));
             $view->setItemDisplay($fieldset);
@@ -604,7 +638,10 @@ class customer_Frame extends Cadre_Base
                 $publicKey = Query::getPublicKeyByBooklet($booklet)[0]['publicKey'];
             }
 
-            $fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=' . $publicKey, false)));
+            $path = Tool::baselink() . '/pdf';
+
+            $fieldset->add(new Item(Tool::buttonLink('PDF', Tool::url(['booklet' => $publicKey], false, $path), false)));
+            //$fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=' . $publicKey, false)));
 
 
             $list = $fieldset->get();
@@ -883,7 +920,7 @@ class customer_Frame extends Cadre_Base
             $share = new Field('Share', Tool::link($link, $link, true, 'URL Public'));
 
             $fieldset = new FieldSet('Edition');
-            $fieldset->add_HTML_Class('Box');
+            //$fieldset->add_HTML_Class('Box');
 
             if ($form->getWhere() != '') {
                 $fieldset->add($share);

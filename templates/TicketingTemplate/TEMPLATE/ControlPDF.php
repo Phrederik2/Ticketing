@@ -123,9 +123,11 @@ class Control_PDF_Frame extends Cadre_Base
 
 		$main = $this->add('BookletDetailsPattern', $details, $main);
 		$main = $this->add('InterventionItemPattern', $items, $main);
-		$html = $this->addBeetwen('main', $main, $html);
 		$html = $this->addBeetwen('header', $header, $html);
 		$html = $this->addBeetwen('footer', $footer, $html);
+		$html = $this->addBeetwen('main', $main, $html);
+		//var_dump($html);
+		//var_dump($footer);
 
 
 		$html = $this->add('css', '<style>' . $css . '</style>', $html);
@@ -138,7 +140,7 @@ class Control_PDF_Frame extends Cadre_Base
 
 			$dompdf->getOptions()->setChroot([$root]);
 
-			$dompdf->loadHtml($main);
+			$dompdf->loadHtml($html);
 
 			if (isset($_dompdf_warnings)) {
 				echo $_dompdf_warnings;
@@ -160,9 +162,15 @@ class Control_PDF_Frame extends Cadre_Base
 				$canvas->text($pageWidth - $width - 20, $pageHeight - 20, $text, $font, $size);
 			});
 
-			$dompdf->stream('sample1.pdf');
+			$pdfName = 'CustomerName' . '_' . date("d-m-Y") . '.pdf';
+
+			if (isset($data[0]['bookletName'])) {
+				$pdfName = $data[0]['bookletName'] . '_' . date("d-m-Y") . '.pdf';
+			}
+
+			$dompdf->stream($pdfName);
 		} else {
-			echo $main;
+			echo $html;
 		}
 	}
 
