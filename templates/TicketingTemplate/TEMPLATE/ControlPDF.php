@@ -3,12 +3,6 @@
 use Dompdf\Dompdf;
 use Dompdf\Options;
 
-/*
-URL de test
-http://localhost/nextcloud/index.php/apps/ticketing/pdf?booklet=0132f220f3e8f251f4ccdc230e4af32cc2461194
-
-*/
-
 class Control_PDF_Frame extends Cadre_Base
 {
 

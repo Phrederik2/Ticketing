@@ -640,7 +640,7 @@ class customer_Frame extends Cadre_Base
 
             $path = Tool::baselink() . '/pdf';
 
-            $fieldset->add(new Item(Tool::buttonLink('PDF', Tool::url(['booklet' => $publicKey], false, $path), false)));
+            $fieldset->add(new Item(Tool::buttonLink('PDF', Tool::url(['booklet' => $publicKey], false, $path))));
             //$fieldset->add(new Item(Tool::buttonLink('PDF', 'pdf?booklet=' . $publicKey, false)));
 
 

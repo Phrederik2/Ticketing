@@ -73,9 +73,9 @@ class PublicAPIController extends PublicShareController
         }
 
         /**
-         * @NoAdminRequired
-         * @publicpage
+         * 
          * @NoCSRFRequired
+         * @PublicPage
          */
         public function pdf()
         {
