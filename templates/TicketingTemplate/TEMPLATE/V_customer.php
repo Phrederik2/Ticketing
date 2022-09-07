@@ -525,8 +525,8 @@ class customer_Frame extends Cadre_Base
         $sql->addWhere('i.booklet_id=?', [$booklet]);
         $sql->addWhere('i.isdelete=0');
         $sql->addGroupBy('i.id');
-        $sql->addOrderBy('i.start', 'DESC');
-        $sql->addOrderBy('i.end', 'DESC');
+        $sql->addOrderBy('timestamp(i.start)', 'DESC');
+        $sql->addOrderBy('timestamp(i.end)', 'DESC');
 
         return $sql;
     }

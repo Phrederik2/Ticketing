@@ -505,10 +505,11 @@ class Query
 
 	static function getInterventionsByBooklet($bookletId)
 	{
-		$sql = "SELECT gift, date_format(start,'%d/%m/%Y %H:%i') start, date_format(end,'%d/%m/%Y %H:%i') end, if(u.displayname='' or u.displayname=null,i.user,u.displayname) displayuser, remark, if(override=1,overridepoint,point) finalpoint FROM TicketingIntervention as i
+		$sql = "SELECT gift, date_format(start,'%d/%m/%Y %H:%i') 'start', date_format(end,'%d/%m/%Y %H:%i') 'end', if(u.displayname='' or u.displayname=null,i.user,u.displayname) displayuser, remark, if(override=1,overridepoint,point) finalpoint FROM TicketingIntervention as i
 				LEFT JOIN oc_users as u on i.user=u.uid
 				WHERE booklet_id=? and isdelete=0
-				ORDER BY start ASC, end ASC
+				ORDER BY timestamp(i.start) DESC, timestamp(i.end) DESC
+
 		";
 
 		return DbCo::getQuery($sql, [$bookletId]);
