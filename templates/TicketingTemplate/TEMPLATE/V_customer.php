@@ -247,6 +247,7 @@ class customer_Frame extends Cadre_Base
 								where archive=0 group by i.customer_id', 'i', 'c.id=i.customer_id', 'LEFT');
         $sql->addWhere('c.isactif=?', [!$active]);
         $sql->addGroupBy('c.id');
+        $sql->addOrderBy('c.name');
 
         return $sql;
     }
@@ -614,7 +615,7 @@ class customer_Frame extends Cadre_Base
         if ($view->getForm() != null) {
             $form = $view->getForm();
 
-            if (!$data[0]['sumpointremaining'] > 0) {
+            if ($data[0]['sumpointremaining'] !== '' and !$data[0]['sumpointremaining'] > 0) {
                 $form->getItem('gift')->setEnable(false);
                 $form->getItem('gift')->setDisplay(true);
                 $form->getItem('gift')->setToolTip('Inactif', 'Impossible de rendre gratuit une intervention dans un carnet qui ne possede pas de point.');
